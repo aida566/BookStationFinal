@@ -3,19 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item android:id="@+id/opcion_imprimir"
-        android:title=""
+        android:title="@string/imprimir"
         android:icon="@drawable/ic_print_white_24dp"
         android:orderInCategory="100"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
+
+    <item android:id="@+id/opcion_compartir"
+        android:title="@string/compartir"
+        android:icon="@drawable/ic_send_white_24dp"
+        android:orderInCategory="100"
+        app:showAsAction="never"/>
 
     <item android:id="@+id/opcion_guardar"
-        android:title=""
+        android:title="@string/guardar"
         android:icon="@drawable/ic_save_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="always"/>
 
     <item android:id="@+id/opcion_editar"
-        android:title=""
+        android:title="@string/editar"
         android:icon="@drawable/ic_edit_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="always"/>

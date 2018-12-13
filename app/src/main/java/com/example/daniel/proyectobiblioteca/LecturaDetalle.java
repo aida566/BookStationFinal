@@ -272,6 +272,10 @@ public class LecturaDetalle extends AppCompatActivity {
             case R.id.opcion_imprimir:
                 doPrint();
                 return true;
+
+            case R.id.opcion_compartir:
+                //Programar compartir con los contactos a traves del email
+                return true;
         }
         return false;
     }
@@ -293,6 +297,7 @@ public class LecturaDetalle extends AppCompatActivity {
         menu.findItem(R.id.opcion_editar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_eliminar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_imprimir).setVisible(true).setEnabled(true);
+        menu.findItem(R.id.opcion_compartir).setVisible(true).setEnabled(true);
     }
 
     private void changeIconSave() {
@@ -300,56 +305,44 @@ public class LecturaDetalle extends AppCompatActivity {
         menu.findItem(R.id.opcion_guardar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_eliminar).setVisible(false).setEnabled(false);
         menu.findItem(R.id.opcion_imprimir).setVisible(false).setEnabled(false);
+        menu.findItem(R.id.opcion_compartir).setVisible(false).setEnabled(false);
     }
 
 
     public void asignaLectura(Lectura lectura){
-
         imagenLibro.setImageURI(lectura.getImagen());
-
         //imagenLibro.setImageBitmap( firebase.descargarFotoLibro(lectura));
-
         txNombreLibro.setText(lectura.getTitulo());
         txAutor.setText(lectura.getAutor().getNombre());
         rbValoracion.setRating(lectura.getValoracion());
-
         int estado = lectura.getEstado();
-
         int selectedId;
 
         if(estado == 1){
             radioGroup.check(R.id.radioButton1);
-
         }else if(estado == 2){
-
             radioGroup.check(R.id.radioButton2);
-
         }else{
-
             radioGroup.check(R.id.radioButton3);
-
         }
-
-
         etFechaInicio.setText( lectura.getFechaInicio());
         etFechaFin.setText( lectura.getFechaFin());
-
         txResumen.setText(lectura.getResumen());
-tbFavorito.setChecked(lectura.getFav());
-
+        tbFavorito.setChecked(lectura.getFav());
     }
 
     public void deshabilitarEdicion() {
         txNombreLibro.setEnabled(false);
+        //txNombreLibro.setFocusable(false);//No activa el teclado cuando le damos al detalle
         txAutor.setEnabled(false);
+        //txAutor.setFocusable(false);//No activa el teclado cuando le damos al detalle
         rbValoracion.setIsIndicator(true);
         txResumen.setEnabled(false);
+        //txResumen.setFocusable(false);//No activa el teclado cuando le damos al detalle
         etFechaInicio.setEnabled(false);
         etFechaInicio.setFocusable(false);
         etFechaFin.setFocusable(false);
         etFechaFin.setEnabled(false);
-        //dtpfInicio.setEnabled(false);
-        //dtpfFin.setEnabled(false);
         tbFavorito.setEnabled(false);
         radioGroup.setEnabled(false);
         radioButton1.setEnabled(false);
@@ -367,7 +360,6 @@ tbFavorito.setChecked(lectura.getFav());
         etFechaInicio.setInputType(InputType.TYPE_NULL);
         etFechaFin.setInputType(InputType.TYPE_NULL);
         etFechaFin.setEnabled(true);
-        //editar=false;
         tbFavorito.setEnabled(true);
         radioGroup.setEnabled(true);
         radioButton1.setEnabled(true);
@@ -377,13 +369,10 @@ tbFavorito.setChecked(lectura.getFav());
     }
 
     public Boolean guardarLectura(){  //metodo que se usará para guardar una lectura cuando añadimos, o cuando editamos una existente
-
         //Variable que controlara si se ha guardado correctamente la Lectura o no
         //En caso se ser falsa no cambiaremos el icono de guardar por el de editar
         Boolean guardada = false;
-
         Resources res = getResources();
-
         String titulo = txNombreLibro.getText().toString();
         String nombreAutor = txAutor.getText().toString();
         Autor autor = new Autor(nombreAutor);
@@ -392,7 +381,6 @@ tbFavorito.setChecked(lectura.getFav());
         //Si se ha modificado pondremos el id = -1.
         if(nombreAutor.equalsIgnoreCase(lec.getAutor().getNombre())){
             autor.setId(lec.getAutor().getId());
-
         }else{
             autor.setId(-1);
         }

@@ -58,4 +58,11 @@
     <string name="opcion_eliminar">Eliminar</string>
     <string name="checkBox">Ser feliz</string>
 
+    <!-- Toolbar -->
+    <string name="guardar">Guardar</string>
+    <string name="editar">Editar</string>
+    <string name="compartir">Compartir</string>
+    <string name="imprimir">Imprimir</string>
+    <string name="borrar">Borrar</string>
+
 </resources>
