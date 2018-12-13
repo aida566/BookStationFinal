@@ -12,6 +12,11 @@
         android:icon="@drawable/ic_edit_white_24dp"
         android:orderInCategory="100"
         app:showAsAction="always"/>
+    <item
+        android:id="@+id/opcion_eliminar"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="@string/opcion_eliminar"
+        app:showAsAction="always" />
 
 
 </menu>
