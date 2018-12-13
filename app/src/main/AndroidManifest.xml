@@ -12,8 +12,7 @@
 
         <!-- Actividad inicial con la que se inicia la aplicacion-->
         <activity
-            android:name=".Inicial"
-            android:label="">
+            android:name=".Inicial">
 
 
         </activity>
@@ -22,7 +21,6 @@
         <activity
             android:name=".Lecturas"
             android:logo="@drawable/logo"
-            android:label=""
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,19 +33,18 @@
         <!-- Actividad para registrarse-->
         <activity
             android:name=".Register"
-            android:label=""/>
+            android:parentActivityName=".Inicial"/>
 
         <!-- Actividad login-->
         <activity
             android:name=".Login"
-            android:label="">
+            android:parentActivityName=".Inicial">
         </activity>
 
         <!-- Actividad para editar y ver el detalle-->
         <activity
             android:name=".LecturaDetalle"
             android:icon="@drawable/logo"
-            android:label=""
             android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".Lecturas">
 
@@ -56,13 +53,10 @@
         <!--Actividad para reestablecer la contraseña-->
         <activity
             android:name=".RestablecerPassword"
-            android:label=""/>
-
+            android:parentActivityName=".Inicial"/>
 
         <activity android:name=".Filtrar"
-
             android:parentActivityName=".Lecturas">
-
         </activity>
     </application>
 

@@ -1,14 +1,18 @@
 package com.example.daniel.proyectobiblioteca;
 
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.print.PrintManager;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -264,7 +268,6 @@ public class LecturaDetalle extends AppCompatActivity {
         return super.onPrepareOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
@@ -285,40 +288,29 @@ public class LecturaDetalle extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.opcion_guardar:
-
                 Boolean guardada = guardarLectura();
-
                 if(guardada){ //Si no se ha guardado correctamente no se harán los cambios
                                 //Es decir, se podrá seguir editando
-
                     deshabilitarEdicion();
-
                     editar = true;
-
                     changeIconEdit();
                 }
-
                 return true;
 
             case R.id.opcion_editar:
-
                 editar = false;
-
                 changeIconSave();
-
                 habilitarEdicion();
-
                 return true;
 
             case R.id.opcion_eliminar:
-
                 eliminaLectura();
+                return true;
 
-
-
+            case R.id.opcion_imprimir:
+                doPrint();
                 return true;
         }
-
         return false;
     }
 
@@ -347,12 +339,14 @@ public class LecturaDetalle extends AppCompatActivity {
         menu.findItem(R.id.opcion_guardar).setVisible(false).setEnabled(false);
         menu.findItem(R.id.opcion_editar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_eliminar).setVisible(true).setEnabled(true);
+        menu.findItem(R.id.opcion_imprimir).setVisible(true).setEnabled(true);
     }
 
     private void changeIconSave() {
         menu.findItem(R.id.opcion_editar).setVisible(false).setEnabled(false);
         menu.findItem(R.id.opcion_guardar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_eliminar).setVisible(false).setEnabled(false);
+        menu.findItem(R.id.opcion_imprimir).setVisible(false).setEnabled(false);
     }
 
 
@@ -421,8 +415,6 @@ public class LecturaDetalle extends AppCompatActivity {
         etFechaInicio.setInputType(InputType.TYPE_NULL);
         etFechaFin.setInputType(InputType.TYPE_NULL);
         etFechaFin.setEnabled(true);
-        //dtpfInicio.setEnabled(true);
-        //dtpfFin.setEnabled(true);
         //editar=false;
         tbFavorito.setEnabled(true);
         radioGroup.setEnabled(true);
@@ -702,4 +694,11 @@ public class LecturaDetalle extends AppCompatActivity {
     }
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public void doPrint(){
+        PrintManager printManager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
+        String jobName = this.getString(R.string.app_name) + lec.getTitulo();
+        printManager.print(jobName, new Imprimir(this,lec), null);
+    }
 }
