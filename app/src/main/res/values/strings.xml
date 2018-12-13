@@ -36,7 +36,6 @@
     <string name="user_vacio">Debe introducir un nombre de usuario</string>
     <string name="email_vacio">Debe introducir una dirección de email</string>
     <string name="password_vacia">Debe introducir la contraseña</string>
-
     <string name="error_restablecer">Su correo no está dado de alta en la aplicación</string>
 
     <!-- Radio Buttons -->
@@ -51,12 +50,12 @@
     <string name="help">*Requerido</string>
     <string name="error">*No puede estar vacío</string>
 
-
     <string name="restablecer">Restablecer contraseña</string>
     <string name="correo_enviado_restablecer">Revise su dirección de correo electrónico para restablecer la contraseña</string>
     <string name="btBuscar" >Buscar</string>
     <string name="tvEstado">Estado</string>
     <string name="tvAutores">Autores</string>
     <string name="opcion_eliminar">Eliminar</string>
+    <string name="checkBox">Ser feliz</string>
 
 </resources>

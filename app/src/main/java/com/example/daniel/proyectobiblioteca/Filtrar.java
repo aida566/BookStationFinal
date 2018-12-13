@@ -61,130 +61,85 @@ public class Filtrar extends AppCompatActivity {
         gestor = new Gestor(this, true);
 
         initSpinners();
-
         setSpinnersListeners();
-
         setBtBuscarListener();
-
         setAdapter(lecturas);
-
         rvFiltrar.setAdapter(adaptador);
-
         lymanager = new LinearLayoutManager(this);
-
         rvFiltrar.setLayoutManager(lymanager);
     }
 
     private void setAdapter(ArrayList<Lectura> nuevaLecturas) {
-
         //Reemplaza el adaptador por una nueva instancia con un nuevo dataset.
-
         adaptador = new AdaptadorLibros(nuevaLecturas, new AdaptadorLibros.OnItemClickListener() {
             @Override
             public void onItemClick(Lectura l) {
-
                 Log.v(TAG, "Lectura clickeada: " + l.getTitulo() + " - " + l.getAutor().getId());
-
                 Intent i = new Intent(Filtrar.this, LecturaDetalle.class);
                 i.putExtra("lectura", l);
-
                 startActivityForResult(i, INICIAR_DETALLE);
             }
         });
-
         rvFiltrar.setAdapter(adaptador);
     }
 
     public void setBtBuscarListener(){
-
         btBuscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 getLecturas();
-
                 setAdapter(lecturas);
-
                 adaptador.notifyDataSetChanged();
-
             }
         });
     }
 
     public void getLecturas(){
-
         lecturas = gestor.getLecturasPorAutorEstado(idAutor, estado);
-
         Log.v(TAG, "Numero de lecturas encontradas: " + lecturas.size());
     }
 
     public void initSpinners(){
-
         //Spinner de los autores
         autores = gestor.getAutores();
-
         ArrayList<String> nombresAutores = new ArrayList<>();
-
         for(Autor a: autores){
-
             nombresAutores.add(a.getNombre());
-
         }
-
         ArrayAdapter adaptadorA = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, nombresAutores );
-
         adaptadorA.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spAutor.setAdapter(adaptadorA);
-
         //Spinner de los estados
         ArrayList<String> estados = new ArrayList<>();
-
         Resources res = getResources();
-
         estados.add(res.getString(R.string.rb_leido));
         estados.add(res.getString(R.string.rb_no_leido));
         estados.add(res.getString(R.string.rb_want_to_read));
-
         ArrayAdapter adaptadorE = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, estados);
-
         adaptadorE.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spEstado.setAdapter(adaptadorE);
-
     }
 
     public void setSpinnersListeners(){
-
         spAutor.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 idAutor = autores.get(position).getId();
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
-
         spEstado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
                 estado = position;
-
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
-
 }
