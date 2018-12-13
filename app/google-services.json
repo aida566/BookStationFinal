@@ -1,0 +1,95 @@
+{
+  "project_info": {
+    "project_number": "462933438647",
+    "firebase_url": "https://lecturas-624a4.firebaseio.com",
+    "project_id": "lecturas-624a4",
+    "storage_bucket": "lecturas-624a4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:462933438647:android:4b65b3a06780834c",
+        "android_client_info": {
+          "package_name": "com.example.daniel.proyectobiblioteca"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "462933438647-rmaiajal4lu6emllmqbd4nchmp24pss1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "4301fd6083674c2ffec00b897a4213060276dbdd"
+          }
+        },
+        {
+          "client_id": "462933438647-kpnj6cqe2723c5lrfnegv59ui4nr5frv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "3bce02d5064c68c2181b8e1929f5616c9e4a3423"
+          }
+        },
+        {
+          "client_id": "462933438647-v1798tjl0t8rvblv529foge5h9duu10g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "a085027ff19c2ed2f82ee24ecc5cd16c030dd4cb"
+          }
+        },
+        {
+          "client_id": "462933438647-bune00l25jeuojelm3u7ugkno5u7asd3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "dfb0ec0cee1b3a83d3fbfb9d6dbd62099de56907"
+          }
+        },
+        {
+          "client_id": "462933438647-h5flul900o8kpg2mnq63tfe7gif486vg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "dbbdaf9f330cc9425b959284270f6f2a54920d9f"
+          }
+        },
+        {
+          "client_id": "462933438647-9i4vf8pqjp1k56a6fh12rh67hejnm8o4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "58de8726e9118c85bae06764f42612f881b4ceac"
+          }
+        },
+        {
+          "client_id": "462933438647-nuj39qh1af9cbtil4kf9917n2e0qu01m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-jvQ8YhV99MApsWJZxS9RVIKRmFFNTKc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "462933438647-nuj39qh1af9cbtil4kf9917n2e0qu01m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

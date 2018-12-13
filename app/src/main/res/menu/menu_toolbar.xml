@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/filtrar"
+        android:icon="@drawable/ic_filter_list_white_24dp"
+        android:title="Filtrar"
+        app:showAsAction="always" />
+    <!-- se añadira despues
+    <item
+        android:id="@+id/buscar"
+        android:icon="@drawable/ic_search_white_24dp"
+        android:title="Search"
+        app:actionViewClass="android.widget.SearchView"
+        app:showAsAction="always" />
+        -->
+    <item
+        android:id="@+id/add_book"
+        android:icon="@drawable/ic_add_white_24dp"
+        android:title="AddBook"
+        app:showAsAction="always"/>
+
+
+</menu>

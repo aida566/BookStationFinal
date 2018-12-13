@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">Book Station</string>
+    <string name="title_activity_lecturas">Lecturas</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_filtrar">Filtrar</string>
+    <string name="action_favoritos">Favoritos</string>
+    <string name="action_addLibro">Añadir libro</string>
+    <string name="action_buscar">Buscar</string>
+    <string name="action_cuenta">Cuenta</string>
+
+    <!-- strings botones de layouts de sesion -->
+    <string name="bt_iniciar_sesion">Iniciar sesión</string>
+    <string name="bt_registrarse">Registrarse</string>
+    <string name="bt_olvidar_contra">¿Has olvidado tu contraseña?</string>
+    <string name="bt_login_redirect">¿Tienes una cuenta? Inicia sesion</string>
+    <string name="bt_register_redirect">¿No tienes cuenta? Registrate</string>
+    <string name="logo">LOGO</string>
+
+    <!-- menu botones -->
+    <string name="text_leidos">Leidos</string>
+    <string name="text_no_leidos">No leidos</string>
+    <string name="text_want_to_read">Por leer</string>
+
+    <!-- hints -->
+    <string name="username">Nombre de usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="email">Email</string>
+    <string name="title">Título</string>
+    <string name="autor">Autor</string>
+    <string name="fecha_ini">Fecha inicio</string>
+    <string name="fecha_fin">Fecha fin</string>
+    <string name="formato_fecha">aaaa/mm/dd</string>
+    <string name="resume">Resumen:</string>
+
+    <!-- Errores -->
+    <string name="user_vacio">Debe introducir un nombre de usuario</string>
+    <string name="email_vacio">Debe introducir una dirección de email</string>
+    <string name="password_vacia">Debe introducir la contraseña</string>
+
+    <string name="error_restablecer">Su correo no está dado de alta en la aplicación</string>
+
+    <!-- Radio Buttons -->
+    <string name="rb_leido">Leido</string>
+    <string name="rb_no_leido">No leido</string>
+    <string name="rb_want_to_read">Por leer</string>
+
+    <string name="choose_image">Seleccionar imagen</string>
+    <string name="cadena_vacia"></string>
+
+    <!-- Mensajes de help para textInputLayout -->
+    <string name="help">*Requerido</string>
+    <string name="error">*No puede estar vacío</string>
+
+
+    <string name="restablecer">Restablecer contraseña</string>
+    <string name="correo_enviado_restablecer">Revise su dirección de correo electrónico para restablecer la contraseña</string>
+    <string name="btBuscar" >Buscar</string>
+    <string name="tvEstado">Estado</string>
+    <string name="tvAutores">Autores</string>
+
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.daniel.proyectobiblioteca">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="Book Station"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <!-- Actividad inicial con la que se inicia la aplicacion-->
+        <activity
+            android:name=".Inicial"
+            android:label="">
+
+        </activity>
+
+        <!--Actividad donde se guardan los libros-->
+        <activity
+            android:name=".Lecturas"
+            android:logo="@drawable/logo"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Actividad para registrarse-->
+        <activity
+            android:name=".Register"
+            android:label=""/>
+
+        <!-- Actividad login-->
+        <activity
+            android:name=".Login"
+            android:label="">
+        </activity>
+
+        <!-- Actividad para editar y ver el detalle-->
+        <activity
+            android:name=".LecturaDetalle"
+            android:icon="@drawable/logo"
+            android:label=""
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".Lecturas">
+
+        </activity>
+
+        <!--Actividad para reestablecer la contraseña-->
+        <activity
+            android:name=".RestablecerPassword"
+            android:label=""/>
+
+
+        <activity android:name=".Filtrar"
+
+            android:parentActivityName=".Lecturas">
+
+        </activity>
+    </application>
+
+</manifest>

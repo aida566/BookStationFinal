@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/read"
+        android:icon="@drawable/ic_leido"
+        android:title="@string/text_leidos" />
+
+    <item
+        android:id="@+id/not_read"
+        android:icon="@drawable/ic_no_leidos"
+        android:title="@string/text_no_leidos" />
+    <item
+        android:id="@+id/want_to_read"
+        android:icon="@drawable/ic_class_black_24dp"
+        android:title="@string/text_want_to_read"/>
+</menu>
