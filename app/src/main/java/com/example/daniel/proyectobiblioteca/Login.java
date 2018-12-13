@@ -1,5 +1,6 @@
 package com.example.daniel.proyectobiblioteca;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputLayout;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,20 +31,38 @@ public class Login extends AppCompatActivity {
     private Button btRestablecerPass;
     private ImageView imagenUsuario;
     private Button btRedirectRegister;
-
     private Firebase firebase;
-
     private TextInputLayout tlLogin;
     private TextInputLayout tlPass;
-
     private FirebaseAuth autentificador;
+    private CheckBox checkBoxGuardarSesion;
+    PreferenciasCompartidas preferencias;
+
+    private String prefEmail;
+    private String prefPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         inicializar();
+
+        /*
+        -Las preferencias devuelven en un String con el user y la contraseña en la misma bvariable separado por un guion
+        los separamos en un array para coger los valores por separado y mandarlos a iniciar sesion */
+
+       if (preferencias.getSesion() != null){
+        String sesion =preferencias.getSesion();
+        String[] arraySesion = sesion.split("-");
+            try {
+                prefEmail = arraySesion[0];
+                prefPassword = arraySesion[1];
+              iniciarSesion(prefEmail, prefPassword);
+            }catch (ArrayIndexOutOfBoundsException ex){
+               // Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+            }
+        }
+
         btIniciarSesion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +90,17 @@ public class Login extends AppCompatActivity {
                 startActivity(register);
             }
         });
+        checkBoxGuardarSesion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checkBoxGuardarSesion.isChecked()){
+
+
+                }
+            }
+        });
+
+
     }
 
 
@@ -83,8 +114,9 @@ public class Login extends AppCompatActivity {
         tlPass = findViewById(R.id.til_password);
         btRedirectRegister = findViewById(R.id.bt_redirect_register);
 
-        //Firebase--
         imagenUsuario=findViewById(R.id.image_actLogin);
+        checkBoxGuardarSesion=findViewById(R.id.checkBoxGuardarSesion);
+        preferencias = new PreferenciasCompartidas(getApplicationContext());
 
         //-----firebase----
         FirebaseApp.initializeApp(this);
@@ -101,24 +133,30 @@ public class Login extends AppCompatActivity {
         else if (pass.isEmpty()){
             tlPass.setError(getString(R.string.password_vacia));
         }
-
     }
 
 
     public void iniciarSesion(String email, String password){
+        final String finalEmail = email;
+        final String  finalPass=password;
 
         autentificador.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(Login.this, "Sesión iniciada", Toast.LENGTH_SHORT).show();
+                    if (checkBoxGuardarSesion.isChecked()){
+                       preferencias.guardarPreferencias(finalEmail, finalPass);
+                    }
                     Intent i = new Intent(Login.this, Lecturas.class);
                     startActivity(i);
                 } else {
+                    preferencias.eliminarPreferencias();
                     Toast.makeText(Login.this, "El usuario o contraseña no son correctos", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
+
+
 }
