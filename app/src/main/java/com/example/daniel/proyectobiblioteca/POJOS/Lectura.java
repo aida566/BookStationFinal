@@ -208,5 +208,20 @@ public class Lectura implements Parcelable {
         return result;
     }
 
-
+    @Override
+    public String toString() {
+        return "Lectura{" +
+                "idLectura=" + idLectura +
+                ", valoracion=" + valoracion +
+                ", estado=" + estado +
+                ", titulo='" + titulo + '\'' +
+                ", resumen='" + resumen + '\'' +
+                ", fbkey='" + fbkey + '\'' +
+                ", autor=" + autor +
+                ", imagen=" + imagen +
+                ", fechaInicio='" + fechaInicio + '\'' +
+                ", fechaFin='" + fechaFin + '\'' +
+                ", fav=" + fav +
+                '}';
+    }
 }
