@@ -73,6 +73,9 @@ public class Gestor {
     }
 
     public int editarLectura(Lectura l){
+
+        Log.v(TAG, "editarLectura");
+
         return bd.update(Contrato.TablaLectura.TABLA_NOMBRE,
                 Utilidades.contentValuesLectura(l),
                 Contrato.TablaLectura._ID + " = ? ",
@@ -130,6 +133,10 @@ public class Gestor {
         int valoracion = c.getInt(c.getColumnIndex(Contrato.TablaLectura.COL_VALORACION));
 
         lectura.setValoracion(valoracion);
+
+        int estado = c.getInt(c.getColumnIndex(Contrato.TablaLectura.COL_ESTADO));
+
+        lectura.setEstado(estado);
 
         return lectura;
     }
@@ -226,6 +233,8 @@ public class Gestor {
     }
 
     public int editarAutor(Autor a){
+
+        Log.v(TAG, "editarAutor");
 
         return bd.update(Contrato.TablaAutor.TABLA_NOMBRE,
                 Utilidades.contentValuesAutor(a),

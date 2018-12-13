@@ -57,5 +57,6 @@
     <string name="btBuscar" >Buscar</string>
     <string name="tvEstado">Estado</string>
     <string name="tvAutores">Autores</string>
+    <string name="opcion_eliminar">Eliminar</string>
 
 </resources>

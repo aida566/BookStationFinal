@@ -212,8 +212,8 @@ public class Lecturas extends AppCompatActivity {
 
                 setAdapter(lecturasLeidas);
             }
-        }else if(requestCode == INICIAR_DETALLE){
-            if(resultCode == RESULT_OK){
+        }else if(requestCode == INICIAR_DETALLE) {
+            if (resultCode == RESULT_OK) {
 
                 //Actualizamos los arrays de lecturas con los nuevos datos de la BD.
                 getLecturasBD();

@@ -142,14 +142,14 @@ public class Lectura implements Parcelable {
         this.fechaFin = fechaFin;
     }
 
-    public boolean isFav() {
+    public boolean getFav() {
         return fav;
     }
-
 
     public void setFav(boolean fav) {
         this.fav = fav;
     }
+
     @Exclude
     public void setFav(int fav) {
         this.fav  = (fav != 0);

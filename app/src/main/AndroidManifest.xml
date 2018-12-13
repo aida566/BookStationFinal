@@ -15,6 +15,7 @@
             android:name=".Inicial"
             android:label="">
 
+
         </activity>
 
         <!--Actividad donde se guardan los libros-->
@@ -28,6 +29,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
 
         <!-- Actividad para registrarse-->

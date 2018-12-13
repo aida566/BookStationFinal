@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
+import android.print.PrintManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
@@ -74,6 +75,10 @@ public class LecturaDetalle extends AppCompatActivity {
     private Ayudante ayudante;
     private Gestor gestor;
 
+    //modo detalle cando se viene con una lectura llena
+    //modo add cuando se viene con una lectura vacia
+    private String modo;
+
     Firebase firebase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,6 +126,8 @@ public class LecturaDetalle extends AppCompatActivity {
 
             deshabilitarEdicion();     //como se quiere ver el detalle se dehabilita la edicion de los edit text
 
+            modo = "detalle";
+
         }else{
 
             Log.v(TAG, "Se envia lectura vacía.");
@@ -129,6 +136,8 @@ public class LecturaDetalle extends AppCompatActivity {
             editar = true;
 
             habilitarEdicion();
+
+            modo = "add";
         }
 
         if(savedInstanceState != null){
@@ -214,7 +223,7 @@ public class LecturaDetalle extends AppCompatActivity {
         etFechaFin = findViewById(R.id.et_fecha_fin);
 
         radioGroup = findViewById(R.id.radioGroup);
-        radioButton1 = findViewById(R.id.radioButton);
+        radioButton1 = findViewById(R.id.radioButton1);
         radioButton2 = findViewById(R.id.radioButton2);
         radioButton3 = findViewById(R.id.radioButton3);
         btSelImagen = findViewById(R.id.btSelImagen);
@@ -300,19 +309,50 @@ public class LecturaDetalle extends AppCompatActivity {
                 habilitarEdicion();
 
                 return true;
+
+            case R.id.opcion_eliminar:
+
+                eliminaLectura();
+
+
+
+                return true;
         }
 
         return false;
     }
 
+    private void eliminaLectura() {
+
+        gestor = new Gestor(this);
+
+        Log.v(TAG, "Lectura que llega a eliminar; " + lec.getTitulo());
+
+        int numF = gestor.eliminarLectura(lec.getIdLectura());
+
+        Log.v(TAG, "Lectura eliminada: " + numF);
+
+        int valorResult = LecturaDetalle.RESULT_OK;
+
+        Intent i = new Intent();
+
+        setResult(valorResult, i);
+
+        Log.v(TAG, "Sale de LecturaDetalle");
+
+        finish();
+    }
+
     private void changeIconEdit() {
         menu.findItem(R.id.opcion_guardar).setVisible(false).setEnabled(false);
         menu.findItem(R.id.opcion_editar).setVisible(true).setEnabled(true);
+        menu.findItem(R.id.opcion_eliminar).setVisible(true).setEnabled(true);
     }
 
     private void changeIconSave() {
         menu.findItem(R.id.opcion_editar).setVisible(false).setEnabled(false);
         menu.findItem(R.id.opcion_guardar).setVisible(true).setEnabled(true);
+        menu.findItem(R.id.opcion_eliminar).setVisible(false).setEnabled(false);
     }
 
 
@@ -326,13 +366,23 @@ public class LecturaDetalle extends AppCompatActivity {
         txAutor.setText(lectura.getAutor().getNombre());
         rbValoracion.setRating(lectura.getValoracion());
 
-        /*
-        String radiobuttonID = "R.id.radioButton1" + lectura.getEstado();
+        int estado = lectura.getEstado();
 
-        Resources res = getResources();
+        int selectedId;
 
-        radioGroup.check(findViewById(radiobuttonID).getId());
-        */
+        if(estado == 1){
+            radioGroup.check(R.id.radioButton1);
+
+        }else if(estado == 2){
+
+            radioGroup.check(R.id.radioButton2);
+
+        }else{
+
+            radioGroup.check(R.id.radioButton3);
+
+        }
+
 
         etFechaInicio.setText( lectura.getFechaInicio());
         etFechaFin.setText( lectura.getFechaFin());
@@ -413,8 +463,8 @@ public class LecturaDetalle extends AppCompatActivity {
         int valoracion = Math.round(rbValoracion.getRating());
         String resumen = txResumen.getText().toString();
 
-        Boolean autorCorrecto = !titulo.equalsIgnoreCase("");
-        Boolean tituloCorrecto = !autor.getNombre().equalsIgnoreCase("");
+        Boolean tituloCorrecto = !titulo.equalsIgnoreCase("");
+        Boolean autorCorrecto = !autor.getNombre().equalsIgnoreCase("");
 
         //Si fechaInicio es anterior a fechaFin devolverá 0
         //Si es posterior devolverá -1
@@ -425,27 +475,7 @@ public class LecturaDetalle extends AppCompatActivity {
 
             //Podemos insertar/editar la lectura
 
-            //Comprobamos el estado.
-            int btCheckedID = radioGroup.getCheckedRadioButtonId();
-            int estado;
-
-            switch (btCheckedID){
-                case R.id.radioButton:
-                    estado = 1;
-                    break;
-
-                case R.id.radioButton2:
-                    estado = 2;
-                    break;
-
-                case R.id.radioButton3:
-                    estado = 3;
-                    break;
-
-                default:
-                    estado = 1;
-                    break;
-            }
+            int estado = obtenerEstadoSeleccionado();
 
             //Key de firebasetemporal
             String key = "";
@@ -464,10 +494,24 @@ public class LecturaDetalle extends AppCompatActivity {
             ayudante = new Ayudante(this);
             gestor = new Gestor(this, true);
 
-            //Insertamos el autor
-            Long numA = gestor.insertarAutor(autor);
+            int filasA = 0;
+            Long numA = Long.valueOf("0");
 
-            if(numA != -1){ //Si el autor se inserta correctamente
+            if(modo.equalsIgnoreCase("detalle")){
+
+                Log.v(TAG, "MODO EDITA AUTOR");
+                //Editamos el autor
+                filasA = gestor.editarAutor(autor);
+
+            }else{
+
+                Log.v(TAG, "MODO INSERTA AUTOR");
+
+                //Insertamos el autor
+                numA = gestor.insertarAutor(autor);
+            }
+
+            if(numA != -1 || filasA != 0){ //Si el autor se inserta correctamente
 
                 //Cogemos el id que se la ha asignado en la BD y se lo asignamos al objeto autor.
                 int idAutor = gestor.getLastIDAutor();
@@ -476,10 +520,21 @@ public class LecturaDetalle extends AppCompatActivity {
                 //Actualizamos el autor de la nueva lectura
                 lecturaNueva.setAutor(autor);
 
-                //Insertamos la nueva lectura
-                Long numL = gestor.insertarLectura(lecturaNueva);
+                int filasL = 0;
+                Long numL = Long.valueOf("0");
 
-                if(numL != -1){
+                if(modo.equalsIgnoreCase("detalle")){
+                    Log.v(TAG, "MODO EDITA");
+                    //Editamos la lectura
+                    filasL = gestor.editarLectura(lecturaNueva);
+
+                }else{
+                    Log.v(TAG, "MODO INSERTA");
+                    //Insertamos la nueva lectura
+                     numL = gestor.insertarLectura(lecturaNueva);
+                }
+
+                if(numL != -1 || filasL != 0){
 
                     valorResult = LecturaDetalle.RESULT_OK;
 
@@ -519,7 +574,7 @@ public class LecturaDetalle extends AppCompatActivity {
 
             finish();
 
-        }else if(titulo.equals("")){
+        }else if(!tituloCorrecto){
 
             txNombreLibro.setError(res.getString(R.string.error));
 
@@ -527,7 +582,7 @@ public class LecturaDetalle extends AppCompatActivity {
 
             guardada = false;
 
-        }else if(autor.getNombre().equalsIgnoreCase("")){
+        }else if(!autorCorrecto){
 
             txAutor.setError(res.getString(R.string.error));
 
@@ -544,6 +599,32 @@ public class LecturaDetalle extends AppCompatActivity {
         */
 
         return guardada;
+    }
+
+    private int obtenerEstadoSeleccionado() {
+        //Comprobamos el estado.
+        int btCheckedID = radioGroup.getCheckedRadioButtonId();
+        int estado;
+
+        switch (btCheckedID){
+            case R.id.radioButton1:
+                estado = 1;
+                break;
+
+            case R.id.radioButton2:
+                estado = 2;
+                break;
+
+            case R.id.radioButton3:
+                estado = 3;
+                break;
+
+            default:
+                estado = 1;
+                break;
+        }
+
+        return estado;
     }
 
     /*
@@ -619,5 +700,6 @@ public class LecturaDetalle extends AppCompatActivity {
         dpd.show();
 
     }
+
 
 }

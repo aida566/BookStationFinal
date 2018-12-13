@@ -17,7 +17,7 @@ public class Utilidades {
         if(lectura.getImagen() != null){
             contentValues.put(Contrato.TablaLectura.COL_IMAGEN, lectura.getImagen().toString());
         }
-        contentValues.put(Contrato.TablaLectura.COL_FAVORITO, lectura.getValoracion());
+        contentValues.put(Contrato.TablaLectura.COL_FAVORITO, lectura.getFav());
         contentValues.put(Contrato.TablaLectura.COL_FECHACOMIENZO, lectura.getFechaInicio().toString());
         contentValues.put(Contrato.TablaLectura.COL_FECHAFINALIZACION, lectura.getFechaFin().toString());
         contentValues.put(Contrato.TablaLectura.COL_VALORACION, lectura.getValoracion());
