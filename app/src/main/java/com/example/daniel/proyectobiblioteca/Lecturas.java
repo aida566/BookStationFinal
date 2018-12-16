@@ -217,7 +217,7 @@ public class Lecturas extends AppCompatActivity {
 
                 //clasificaLecturasFireBase();
 
-                //setAdapter(lecturasLeidas);
+                //setAdapter(lecturasLeidas);mmmm
 
             }
         }else if(requestCode == INICIAR_DETALLE) {
