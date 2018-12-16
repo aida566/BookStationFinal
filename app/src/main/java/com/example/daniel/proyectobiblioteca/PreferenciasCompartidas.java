@@ -32,10 +32,17 @@ public class PreferenciasCompartidas {
     }
 
     public void eliminarPreferencias(){
-if (getSesion()!=null) {
-    pref.edit().clear().apply();
-}
-        System.out.println("PREFERENCIAS borradas");
+           //  pref.edit().clear().apply();
+        //   pref = context.getSharedPreferences("credenciales", Context.MODE_PRIVATE).edit().remove("credenciales");
+        pref = PreferenceManager.getDefaultSharedPreferences(context);
+        editor = pref.edit();
+         pref.edit().remove("credenciales").apply();
+     // this.pref = null;
+        this.editor = null;
+      //  this.context=null;
+             System.out.println("PREFERENCIAS borradas");
+
+
     }
 
     @JavascriptInterface

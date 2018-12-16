@@ -63,6 +63,22 @@
           }
         },
         {
+          "client_id": "462933438647-nhfce5jhnu0l7at28she6ga6rp23b9dq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "f3dc378957dc5f3e633e236c80168ba837db57e9"
+          }
+        },
+        {
+          "client_id": "462933438647-1fsf2mdm446pmte9290ti02jut284cqo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.daniel.proyectobiblioteca",
+            "certificate_hash": "bfefe0cd2ef00d32e57044840306637c124a5096"
+          }
+        },
+        {
           "client_id": "462933438647-nuj39qh1af9cbtil4kf9917n2e0qu01m.apps.googleusercontent.com",
           "client_type": 3
         }

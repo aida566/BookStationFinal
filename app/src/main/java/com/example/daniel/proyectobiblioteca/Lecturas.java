@@ -1,6 +1,7 @@
 package com.example.daniel.proyectobiblioteca;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -62,6 +63,8 @@ public class Lecturas extends AppCompatActivity {
 
     private ArrayList<Lectura> lecturasFirebase = new ArrayList<>();
 
+    PreferenciasCompartidas preferencias ;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -114,6 +117,8 @@ public class Lecturas extends AppCompatActivity {
         Resources res = getResources();
         getSupportActionBar().setIcon(res.getDrawable(R.mipmap.ic_logo));
         getSupportActionBar().setTitle("");
+
+        preferencias =  new PreferenciasCompartidas(getApplicationContext());;
 
         this.container = (ConstraintLayout) findViewById(R.id.container);
         this.navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -198,6 +203,18 @@ public class Lecturas extends AppCompatActivity {
             startActivity(i);
 
             return true;
+        }
+        if (id == R.id.logout) {
+
+
+        Firebase firebase = new Firebase(getApplicationContext());
+        firebase.cerrarSesion();
+        PreferenciasCompartidas pref = new PreferenciasCompartidas(getApplicationContext());
+            pref.eliminarPreferencias();
+        Intent i = new Intent(Lecturas.this, Inicial.class);
+      //  i.putExtra("cerrarSesion", 1);
+        startActivity(i);
+        return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -318,6 +335,8 @@ public class Lecturas extends AppCompatActivity {
             }
         });*/
     }
+
+
 
     private void clasificaLecturasFireBase(){
 

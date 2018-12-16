@@ -151,7 +151,10 @@ public class Login extends AppCompatActivity {
                     Intent i = new Intent(Login.this, Lecturas.class);
                     startActivity(i);
                 } else {
-                    preferencias.eliminarPreferencias();
+                    try{
+                        preferencias.eliminarPreferencias();
+                    } catch (NullPointerException ex){
+                    }
                     Toast.makeText(Login.this, "El usuario o contraseña no son correctos", Toast.LENGTH_SHORT).show();
                 }
             }

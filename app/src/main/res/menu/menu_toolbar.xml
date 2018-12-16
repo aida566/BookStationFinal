@@ -15,11 +15,18 @@
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
         -->
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/ic_exit_white"
+        android:title="SignOut"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/add_book"
         android:icon="@drawable/ic_add_white_24dp"
         android:title="AddBook"
         app:showAsAction="always"/>
+
 
 
 </menu>
