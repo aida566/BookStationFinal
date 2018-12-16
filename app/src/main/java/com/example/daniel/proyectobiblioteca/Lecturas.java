@@ -79,6 +79,7 @@ public class Lecturas extends AppCompatActivity {
 
                     adaptador.setArray(lecturasLeidas);
                     adaptador.notifyDataSetChanged();
+                    /**/
 
                     return true;
 
