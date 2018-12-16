@@ -197,7 +197,9 @@ public class Lectura implements Parcelable {
         HashMap<String, Object> result = new HashMap<>();
         result.put("titulo", titulo);
         result.put("idAutor", autor.getNombre());
-        result.put("imagen", imagen.toString());
+        if(imagen != null){
+            result.put("imagen", imagen.toString());
+        }
         result.put("fav", fav);
         result.put("fechaInicio", fechaInicio);
         result.put("fechaFin", fechaFin);

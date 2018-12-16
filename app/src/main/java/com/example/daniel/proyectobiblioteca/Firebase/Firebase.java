@@ -97,6 +97,11 @@ public  class Firebase {
 
     }
 
+    public FirebaseUser getUsuario(){
+
+        return autentificador.getCurrentUser();
+    }
+
     public  void crearUsuario(String email, String password) {
         autentificador.createUserWithEmailAndPassword(email, password).addOnCompleteListener
                 // ((Executor) this, new OnCompleteListener<AuthResult>() { //El de carmelo estaba asi pero da error de casting
@@ -134,11 +139,12 @@ public  class Firebase {
         });
     }
 
-    public  void guardarLecturaAsociada(Lectura l, Bitmap foto){ // guarda un item en el directorio de usuario
+    public  String guardarLecturaAsociada(Lectura l, Bitmap foto){ // guarda un item en el directorio de usuario
         //   Item i = new Item("3", "nombre3", "mensaje3");
         Map<String, Object> saveItem = new HashMap<>();
         FirebaseUser usuarioActual= autentificador.getCurrentUser();
-        String key = reference.child("lectura").push().getKey();
+        String key = "";
+        key = reference.child("lectura").push().getKey();
 
         saveItem.put("/correo/" + usuarioActual.getUid() +"-"+ usuarioActual.getEmail()+ "/libro/" + key + "/", l.toMap());
         reference = database.getReference();
@@ -157,6 +163,37 @@ public  class Firebase {
         if (foto != null){
             subirFotoLibro(foto, l.getImagen(), l.getTitulo());
         }
+
+        return key;
+    }
+    public  String guardarLecturaAsociada(Lectura l){ // guarda un item en el directorio de usuario
+        //   Item i = new Item("3", "nombre3", "mensaje3");
+        Map<String, Object> saveItem = new HashMap<>();
+        FirebaseUser usuarioActual= autentificador.getCurrentUser();
+        String key = "";
+        key = reference.child("lectura").push().getKey();
+
+        saveItem.put("/correo/" + usuarioActual.getUid() +"-"+ usuarioActual.getDisplayName() + "/libro/" + key + "/", l.toMap());
+
+        reference = database.getReference();
+
+        reference.updateChildren(saveItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.v(TAG, "LECTURA GUARDADA");
+                }else{
+                    System.out.println("ERROR LECTURAASOCIADA " +task.getException().toString());
+                }
+            }
+        });
+        /*
+        //le pasamos al metodo una lectura, y un bitmap de foto, si la foto no es null, la sube a firebase
+        if (foto != null){
+            subirFotoLibro(foto, l.getImagen(), l.getTitulo());
+        }
+        */
+        return key;
     }
 
     public void subirFotoLibro(Bitmap bitmap, Uri uri, String titulo) {

@@ -13,7 +13,11 @@
         <!-- Actividad inicial con la que se inicia la aplicacion-->
         <activity
             android:name=".Inicial">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 
@@ -22,11 +26,7 @@
             android:name=".Lecturas"
             android:logo="@drawable/logo"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
 

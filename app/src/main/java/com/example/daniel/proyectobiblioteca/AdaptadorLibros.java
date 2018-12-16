@@ -2,6 +2,7 @@ package com.example.daniel.proyectobiblioteca;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,9 @@ import java.util.ArrayList;
 
 public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHolder>{
 
-    private ArrayList<Lectura> listaLecturas;
+    private static final String TAG = "XYZ";
     private final OnItemClickListener listener;
+    private ArrayList<Lectura> listaLecturas;
 
     //---Constructor que recibe el array de lecturas----
 
@@ -25,8 +27,8 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         this.listener = listener;
     }
 
-    public interface OnItemClickListener {
-        void onItemClick(Lectura l);
+    public void setArray(ArrayList<Lectura> arrayLecturas) {
+        this.listaLecturas = arrayLecturas;
     }
 
     @NonNull
@@ -46,8 +48,12 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         viewHolder.valoracionLectura.setRating(lectura.getValoracion());
 
         if(lectura.getImagen() != null){
+
+            Log.v(TAG, "En adaptador: uri no es null");
             viewHolder.imagenLectura.setImageURI(lectura.getImagen());
         }
+
+        viewHolder.imagenLectura.setImageURI(lectura.getImagen());
 
         viewHolder.bind(listaLecturas.get(i), listener);
     }
@@ -57,6 +63,9 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         return listaLecturas.size();
     }
 
+    public interface OnItemClickListener {
+        void onItemClick(Lectura l);
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

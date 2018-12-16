@@ -85,6 +85,7 @@ public class LecturaDetalle extends AppCompatActivity {
     private String modo;
 
     Firebase firebase;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +103,7 @@ public class LecturaDetalle extends AppCompatActivity {
         toggleOnClick();
         datePicker();
 
-        //firebase = new Firebase(getApplicationContext());
+        firebase = new Firebase(getApplicationContext());
         btSelImagen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -272,10 +273,6 @@ public class LecturaDetalle extends AppCompatActivity {
             case R.id.opcion_imprimir:
                 doPrint();
                 return true;
-
-            case R.id.opcion_compartir:
-                //Programar compartir con los contactos a traves del email
-                return true;
         }
         return false;
     }
@@ -297,7 +294,6 @@ public class LecturaDetalle extends AppCompatActivity {
         menu.findItem(R.id.opcion_editar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_eliminar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_imprimir).setVisible(true).setEnabled(true);
-        menu.findItem(R.id.opcion_compartir).setVisible(true).setEnabled(true);
     }
 
     private void changeIconSave() {
@@ -305,44 +301,53 @@ public class LecturaDetalle extends AppCompatActivity {
         menu.findItem(R.id.opcion_guardar).setVisible(true).setEnabled(true);
         menu.findItem(R.id.opcion_eliminar).setVisible(false).setEnabled(false);
         menu.findItem(R.id.opcion_imprimir).setVisible(false).setEnabled(false);
-        menu.findItem(R.id.opcion_compartir).setVisible(false).setEnabled(false);
     }
 
 
     public void asignaLectura(Lectura lectura){
+
         imagenLibro.setImageURI(lectura.getImagen());
-        //imagenLibro.setImageBitmap( firebase.descargarFotoLibro(lectura));
+
+        imagenLibro.setImageBitmap( firebase.descargarFotoLibro(lectura));
+
         txNombreLibro.setText(lectura.getTitulo());
         txAutor.setText(lectura.getAutor().getNombre());
         rbValoracion.setRating(lectura.getValoracion());
+
         int estado = lectura.getEstado();
-        int selectedId;
 
         if(estado == 1){
             radioGroup.check(R.id.radioButton1);
+
         }else if(estado == 2){
+
             radioGroup.check(R.id.radioButton2);
+
         }else{
+
             radioGroup.check(R.id.radioButton3);
+
         }
+
         etFechaInicio.setText( lectura.getFechaInicio());
         etFechaFin.setText( lectura.getFechaFin());
+
         txResumen.setText(lectura.getResumen());
         tbFavorito.setChecked(lectura.getFav());
+
     }
 
     public void deshabilitarEdicion() {
         txNombreLibro.setEnabled(false);
-        //txNombreLibro.setFocusable(false);//No activa el teclado cuando le damos al detalle
         txAutor.setEnabled(false);
-        //txAutor.setFocusable(false);//No activa el teclado cuando le damos al detalle
         rbValoracion.setIsIndicator(true);
         txResumen.setEnabled(false);
-        //txResumen.setFocusable(false);//No activa el teclado cuando le damos al detalle
         etFechaInicio.setEnabled(false);
         etFechaInicio.setFocusable(false);
         etFechaFin.setFocusable(false);
         etFechaFin.setEnabled(false);
+        //dtpfInicio.setEnabled(false);
+        //dtpfFin.setEnabled(false);
         tbFavorito.setEnabled(false);
         radioGroup.setEnabled(false);
         radioButton1.setEnabled(false);
@@ -360,6 +365,7 @@ public class LecturaDetalle extends AppCompatActivity {
         etFechaInicio.setInputType(InputType.TYPE_NULL);
         etFechaFin.setInputType(InputType.TYPE_NULL);
         etFechaFin.setEnabled(true);
+        //editar=false;
         tbFavorito.setEnabled(true);
         radioGroup.setEnabled(true);
         radioButton1.setEnabled(true);
@@ -369,10 +375,13 @@ public class LecturaDetalle extends AppCompatActivity {
     }
 
     public Boolean guardarLectura(){  //metodo que se usará para guardar una lectura cuando añadimos, o cuando editamos una existente
+
         //Variable que controlara si se ha guardado correctamente la Lectura o no
         //En caso se ser falsa no cambiaremos el icono de guardar por el de editar
         Boolean guardada = false;
+
         Resources res = getResources();
+
         String titulo = txNombreLibro.getText().toString();
         String nombreAutor = txAutor.getText().toString();
         Autor autor = new Autor(nombreAutor);
@@ -381,6 +390,7 @@ public class LecturaDetalle extends AppCompatActivity {
         //Si se ha modificado pondremos el id = -1.
         if(nombreAutor.equalsIgnoreCase(lec.getAutor().getNombre())){
             autor.setId(lec.getAutor().getId());
+
         }else{
             autor.setId(-1);
         }
@@ -443,6 +453,28 @@ public class LecturaDetalle extends AppCompatActivity {
 
                     int filasL = 0;
                     Long numL = Long.valueOf("0");
+                    /*
+                    //--------SUBIDA DE LECTURA Y DE FOTO A FIREBASE
+                    Bitmap fotoBitmap=null;
+                    try {
+                        fotoBitmap = getBitmapFromUri(lecturaNueva.getImagen());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                     if (fotoBitmap != null) {
+                        Log.v(TAG, "bitMap no es null");
+                         //Insertamos la lectura con imagen
+                         firebase.guardarLecturaAsociada(lecturaNueva,fotoBitmap);
+
+                     }else{
+
+                        Log.v(TAG, "bitmap es null");
+                    */
+                        //Insertamos la lectura sin imagen
+                         key = firebase.guardarLecturaAsociada(lecturaNueva);
+                     //}
+
+                    lecturaNueva.setFbkey(key);
 
                     if (modo.equalsIgnoreCase("detalle")) {
                         Log.v(TAG, "MODO EDITA");
@@ -456,27 +488,17 @@ public class LecturaDetalle extends AppCompatActivity {
                     }
 
                     if (numL != -1 || filasL != 0) {
+                        Log.v(TAG, "Se ha insertado en la BDLocal");
                         valorResult = LecturaDetalle.RESULT_OK;
                     } else {
-                        //Borrar el autor que se ha insertado (hay que hacer el método para borrar en gestor)
+                        Log.v(TAG, "No se ha insertado en la BDLocal");
+                        gestor.eliminarAutor(autor.getId());
                         valorResult = LecturaDetalle.RESULT_CANCELED;
                     }
 
                 } else {
                     valorResult = LecturaDetalle.RESULT_CANCELED;
                 }
-
-            /*
-            //--------SUBIDA DE LECTURA Y DE FOTO A FIREBASE
-            Bitmap fotoBitmap=null;
-            try {
-                fotoBitmap = getBitmapFromUri(lecturaNueva.getImagen());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            // if (fotoBitmap != null){
-            firebase.guardarLecturaAsociada(lecturaNueva, fotoBitmap);
-            */
 
                 Intent i = new Intent();
                 setResult(valorResult, i);
@@ -530,7 +552,8 @@ public class LecturaDetalle extends AppCompatActivity {
         Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
         parcelFileDescriptor.close();
         return image;
-    }*/
+    }
+    */
 
     public void toggleOnClick(){
         //Accion del boton favorito

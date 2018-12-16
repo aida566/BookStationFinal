@@ -60,10 +60,7 @@ public class Lecturas extends AppCompatActivity {
     private ArrayList<Lectura> lecturasPorLeer = new ArrayList<>(); //tercer array donde guardamos los libros por leer
     private ArrayList<Autor> autores = new ArrayList<>();
 
-
-
     private ArrayList<Lectura> lecturasFirebase = new ArrayList<>();
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -122,12 +119,14 @@ public class Lecturas extends AppCompatActivity {
         gestor = new Gestor(this, true);
 
         //Obtenemos las lecturas de la bd
-        getLecturasBD();
+        //getLecturasBD();
+
+        getLecturasFirebase();
+        //clasificaLecturasFireBase();
         
         //Cargamos el adaptador inicialmente con las lectuas leídas
+        //setAdapter(lecturasLeidas);
         setAdapter(lecturasLeidas);
-
-        rvLecturas.setAdapter(adaptador);
 
         lymanager = new LinearLayoutManager(this);
 
@@ -208,17 +207,26 @@ public class Lecturas extends AppCompatActivity {
             if(resultCode == RESULT_OK){
 
                 //Actualizamos los arrays de lecturas con los nuevos datos de la BD.
-                getLecturasBD();
+                //getLecturasBD();
 
-                setAdapter(lecturasLeidas);
+                getLecturasFirebase();
+
+                //clasificaLecturasFireBase();
+
+                //setAdapter(lecturasLeidas);
+
             }
         }else if(requestCode == INICIAR_DETALLE) {
             if (resultCode == RESULT_OK) {
 
                 //Actualizamos los arrays de lecturas con los nuevos datos de la BD.
-                getLecturasBD();
+                //getLecturasBD();
 
-                setAdapter(lecturasLeidas);
+                getLecturasFirebase();
+
+                //clasificaLecturasFireBase();
+
+
             }
         }
 
@@ -232,33 +240,112 @@ public class Lecturas extends AppCompatActivity {
 
     }
 
-/*
-    public void setLecturasFirebase(){
 
+    public void getLecturasFirebase(){
+
+        Log.v(TAG, "getLecturasFirebase");
         Firebase firebase = new Firebase(getApplicationContext());
         FirebaseUser usuario = firebase.getUsuario();
+        Log.v(TAG, "getLecturasFirebase " + usuario.getEmail());
 
         Query listaLibros =
                 FirebaseDatabase.getInstance().getReference()
-                        .child("/Usuario/" + usuario.getUid() +"-"+ usuario.getDisplayName()+"/libros/")
-                        .orderByKey();
-        listaLibros.addValueEventListener(new ValueEventListener() {
+                        .child("/correo/" + usuario.getUid() +"-"+ usuario.getDisplayName()+"/libro/");
+                        //.orderByKey();
+
+        listaLibros.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Log.v(TAG, "en el metodo pre");
+                Lectura lecFB1 = new Lectura();
+                lecFB1.setTitulo("fff");
+                lecFB1.setAutor(new Autor("pepe"));
+                lecturasFirebase.add(lecFB1);
+                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()){
+                    System.out.println("NODO "+ postSnapshot.getValue().toString());
+
+                    Lectura lecFB = new Lectura();
+
+                    lecFB = postSnapshot.getValue(Lectura.class);
+
+                    lecturasFirebase.add(lecFB);
+
+                    Log.v(TAG, "en el metodo" + lecturasFirebase.get(0));
+
+                }
+                clasificaLecturasFireBase();
+                //setAdapter(lecturasLeidas);
+                adaptador.setArray(lecturasLeidas);
+                adaptador.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        /*listaLibros.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v(TAG, "en el metodo pre");
+                Lectura lecFB1 = new Lectura();
+                lecFB1.setTitulo("fff");
+                lecFB1.setAutor(new Autor("pepe"));
+                lecturasFirebase.add(lecFB1);
                 for (DataSnapshot postSnapshot: dataSnapshot.getChildren()){
-                    System.out.println("NODO "+postSnapshot.getValue().toString());
-                    lecturasFirebase.add(postSnapshot.getValue(Lectura.class));
-                    adaptador.notifyDataSetChanged();
+                    System.out.println("NODO "+ postSnapshot.getValue().toString());
+
+                    Lectura lecFB = new Lectura();
+
+                    lecFB = postSnapshot.getValue(Lectura.class);
+
+                    lecturasFirebase.add(lecFB);
+
+                    Log.v(TAG, "en el metodo" + lecturasFirebase.get(0));
+
                 }
+                clasificaLecturasFireBase();
+                //setAdapter(lecturasLeidas);
+                adaptador.setArray(lecturasLeidas);
+                adaptador.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
-        });
-        setAdapter(lecturasFirebase);
-
+        });*/
     }
 
-*/
+    private void clasificaLecturasFireBase(){
+
+        Log.v(TAG, "clasifica las lecturas");
+
+        lecturasLeidas = new ArrayList<>();
+        lecturasNoLeidas = new ArrayList<>();
+        lecturasPorLeer = new ArrayList<>();
+
+        Log.v(TAG, "1" + lecturasFirebase.toString());
+
+        for(Lectura lec: lecturasFirebase){
+
+            Log.v(TAG, "Entra en el for");
+
+            int i = 0;
+
+            int estado = lec.getEstado();
+
+            if(estado == 1){
+                lecturasLeidas.add(lec);
+                Log.v(TAG, "clisifica " + lecturasLeidas.get(i));
+            }else if(estado == 2){
+                lecturasNoLeidas.add(lec);
+                Log.v(TAG, "clisifica " + lecturasLeidas.get(i));
+            }else if(estado == 3){
+                lecturasPorLeer.add(lec);
+                Log.v(TAG, "clisifica " + lecturasLeidas.get(i));
+            }
+
+            i++;
+        }
+    }
 
 }
