@@ -77,19 +77,22 @@ public class Lecturas extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.read:
 
-                    setAdapter(lecturasLeidas);
+                    adaptador.setArray(lecturasLeidas);
+                    adaptador.notifyDataSetChanged();
 
                     return true;
 
                 case R.id.not_read:
 
-                    setAdapter(lecturasNoLeidas);
+                    adaptador.setArray(lecturasNoLeidas);
+                    adaptador.notifyDataSetChanged();
 
                     return true;
 
                 case R.id.want_to_read:
 
-                    setAdapter(lecturasPorLeer);
+                    adaptador.setArray(lecturasPorLeer);
+                    adaptador.notifyDataSetChanged();
 
                     return true;
             }
@@ -334,17 +337,17 @@ public class Lecturas extends AppCompatActivity {
             int estado = lec.getEstado();
 
             if(estado == 1){
+
                 lecturasLeidas.add(lec);
-                Log.v(TAG, "clisifica " + lecturasLeidas.get(i));
+
             }else if(estado == 2){
+
                 lecturasNoLeidas.add(lec);
-                Log.v(TAG, "clisifica " + lecturasLeidas.get(i));
+
             }else if(estado == 3){
                 lecturasPorLeer.add(lec);
-                Log.v(TAG, "clisifica " + lecturasLeidas.get(i));
             }
 
-            i++;
         }
     }
 
