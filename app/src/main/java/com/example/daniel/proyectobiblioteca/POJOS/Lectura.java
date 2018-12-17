@@ -17,12 +17,13 @@ public class Lectura implements Parcelable {
     private int idLectura, valoracion, estado;
     private String titulo, resumen, fbkey;
     private Autor autor;
-    private Uri imagen;
+    private String imagen;
     private String fechaInicio, fechaFin;
     private boolean fav;
 
-    public Lectura(String titulo, Autor autor, Uri imagen, boolean fav, String fechaInicio, String fechaFin,
+    public Lectura(String titulo, Autor autor, String imagen, boolean fav, String fechaInicio, String fechaFin,
                    int valoracion, int estado, String resumen, String fbkey) {
+
 
         this.titulo = titulo;
         this.autor = autor;
@@ -54,7 +55,8 @@ public class Lectura implements Parcelable {
         idLectura = in.readInt();
         titulo = in.readString();
         autor = in.readParcelable(Autor.class.getClassLoader());
-        imagen = in.readParcelable(Uri.class.getClassLoader());
+      //  imagen = in.readString(Uri.class.getClassLoader());
+        imagen = in.readString();
         fav = in.readByte() != 0;
         //Pongo las fechas como Strings ya que no hay opción para Date.
         fechaInicio = in.readString();
@@ -118,11 +120,11 @@ public class Lectura implements Parcelable {
         this.autor = autor;
     }
 
-    public Uri getImagen() {
+    public String getImagen() {
         return imagen;
     }
 
-    public void setImagen(Uri imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 
@@ -181,7 +183,7 @@ public class Lectura implements Parcelable {
         dest.writeInt(idLectura);
         dest.writeString(titulo);
         dest.writeParcelable(autor, flags);
-        dest.writeParcelable(imagen, flags);
+        dest.writeString(imagen);
         dest.writeByte((byte) (fav ? 1 : 0));
         dest.writeString(fechaInicio);
         dest.writeString(fechaFin);
@@ -198,7 +200,7 @@ public class Lectura implements Parcelable {
         result.put("titulo", titulo);
         result.put("idAutor", autor.getNombre());
         if(imagen != null){
-            result.put("imagen", imagen.toString());
+            result.put("imagen", imagen);
         }
         result.put("fav", fav);
         result.put("fechaInicio", fechaInicio);
@@ -220,7 +222,8 @@ public class Lectura implements Parcelable {
                 ", resumen='" + resumen + '\'' +
                 ", fbkey='" + fbkey + '\'' +
                 ", autor=" + autor +
-                ", imagen=" + imagen +
+
+               // ", imagen=" + imagen.toString() +
                 ", fechaInicio='" + fechaInicio + '\'' +
                 ", fechaFin='" + fechaFin + '\'' +
                 ", fav=" + fav +

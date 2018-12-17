@@ -306,9 +306,18 @@ public class LecturaDetalle extends AppCompatActivity {
 
     public void asignaLectura(Lectura lectura){
 
-        imagenLibro.setImageURI(lectura.getImagen());
+        imagenLibro.setImageURI(Uri.parse(lectura.getImagen()));
 
         imagenLibro.setImageBitmap( firebase.descargarFotoLibro(lectura));
+        Bitmap bmp = null;
+        try {
+             bmp = getBitmapFromUri(Uri.parse(lectura.getImagen()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        imagenLibro.setImageBitmap( bmp);
+
 
         txNombreLibro.setText(lectura.getTitulo());
         txAutor.setText(lectura.getAutor().getNombre());
@@ -414,8 +423,15 @@ public class LecturaDetalle extends AppCompatActivity {
                 int estado = obtenerEstadoSeleccionado();
                 //Key de firebasetemporal
                 String key = "";
-                Lectura lecturaNueva = new Lectura(titulo, autor, uriImagen, fav, fechaInicio,
-                        fechaFin, valoracion, estado, resumen, key);
+            Lectura lecturaNueva;
+            if (uriImagen ==null){
+                     lecturaNueva = new Lectura(titulo, autor, null, fav, fechaInicio,
+                            fechaFin, valoracion, estado, resumen, key);
+                }else {
+                     lecturaNueva = new Lectura(titulo, autor, uriImagen.toString(), fav, fechaInicio,
+                            fechaFin, valoracion, estado, resumen, key);
+
+                }
                 Log.v("FAV", lecturaNueva.toString());
                 //Variable que controlará si el resultado del activityForResult es correcto o erróneo
                 //dependiendo de si se han insertado correctamente los datos en la BD.
@@ -543,7 +559,7 @@ public class LecturaDetalle extends AppCompatActivity {
         return estado;
     }
 
-    /*
+
     //---------Metodo para pasarle la foto al firebase como bitmap
     private Bitmap getBitmapFromUri(Uri uri) throws IOException {
         ParcelFileDescriptor parcelFileDescriptor =
@@ -553,7 +569,7 @@ public class LecturaDetalle extends AppCompatActivity {
         parcelFileDescriptor.close();
         return image;
     }
-    */
+
 
     public void toggleOnClick(){
         //Accion del boton favorito

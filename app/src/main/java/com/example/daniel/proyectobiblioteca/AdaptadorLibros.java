@@ -1,5 +1,6 @@
 package com.example.daniel.proyectobiblioteca;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -50,10 +51,10 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         if(lectura.getImagen() != null){
 
             Log.v(TAG, "En adaptador: uri no es null");
-            viewHolder.imagenLectura.setImageURI(lectura.getImagen());
+            viewHolder.imagenLectura.setImageURI(Uri.parse(lectura.getImagen()));
         }
 
-        viewHolder.imagenLectura.setImageURI(lectura.getImagen());
+      //-----ee  viewHolder.imagenLectura.setImageURI(Uri.parse(lectura.getImagen()));
 
         viewHolder.bind(listaLecturas.get(i), listener);
     }
