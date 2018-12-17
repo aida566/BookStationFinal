@@ -205,8 +205,6 @@ public class Lecturas extends AppCompatActivity {
             return true;
         }
         if (id == R.id.logout) {
-
-
         Firebase firebase = new Firebase(getApplicationContext());
         firebase.cerrarSesion();
         PreferenciasCompartidas pref = new PreferenciasCompartidas(getApplicationContext());
@@ -215,6 +213,12 @@ public class Lecturas extends AppCompatActivity {
       //  i.putExtra("cerrarSesion", 1);
         startActivity(i);
         return true;
+        }
+
+        if (id == R.id.help_menu) {
+            Intent i = new Intent(Lecturas.this, Help.class);
+            startActivity(i);
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

@@ -25,7 +25,7 @@
         <activity
             android:name=".Lecturas"
             android:logo="@drawable/logo"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Actividad para registrarse -->
         <activity
@@ -35,24 +35,27 @@
         <!-- Actividad login -->
         <activity
             android:name=".Login"
-            android:parentActivityName=".Inicial"></activity>
+            android:parentActivityName=".Inicial" />
 
         <!-- Actividad para editar y ver el detalle -->
         <activity
             android:name=".LecturaDetalle"
             android:icon="@drawable/logo"
             android:parentActivityName=".Lecturas"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- Actividad para reestablecer la contraseña -->
         <activity
             android:name=".RestablecerPassword"
             android:parentActivityName=".Inicial" />
 
-        <!-- -->
+        <!--  -->
         <activity
             android:name=".Filtrar"
-            android:parentActivityName=".Lecturas"></activity>
+            android:parentActivityName=".Lecturas" />
+        <activity android:name=".Help"
+            android:parentActivityName=".Lecturas" />
+
 
     </application>
 
