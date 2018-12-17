@@ -29,4 +29,5 @@ public class Contacto {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
 }
