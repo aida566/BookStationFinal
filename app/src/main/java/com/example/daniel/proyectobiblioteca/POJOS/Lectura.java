@@ -1,5 +1,6 @@
 package com.example.daniel.proyectobiblioteca.POJOS;
 
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -27,6 +28,21 @@ public class Lectura implements Parcelable {
 
         this.titulo = titulo;
         this.autor = autor;
+        this.imagen = imagen;
+        this.fav = fav;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
+        this.valoracion = valoracion;
+        this.estado = estado;
+        this.resumen = resumen;
+        this.fbkey = fbkey;
+    }
+
+    public Lectura(String titulo, String nombreAutor, Uri imagen, boolean fav, String fechaInicio, String fechaFin,
+                   int valoracion, int estado, String resumen, String fbkey) {
+
+        this.titulo = titulo;
+        this.autor = new Autor(nombreAutor);
         this.imagen = imagen;
         this.fav = fav;
         this.fechaInicio = fechaInicio;
@@ -197,6 +213,7 @@ public class Lectura implements Parcelable {
     public Map<String, Object> toMap() {
 
         HashMap<String, Object> result = new HashMap<>();
+
         result.put("titulo", titulo);
         result.put("idAutor", autor.getNombre());
         if(imagen != null){

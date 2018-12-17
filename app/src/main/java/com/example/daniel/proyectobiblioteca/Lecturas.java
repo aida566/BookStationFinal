@@ -34,6 +34,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -42,6 +43,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Lecturas extends AppCompatActivity {
 
@@ -268,6 +270,8 @@ public class Lecturas extends AppCompatActivity {
 
     public void getLecturasFirebase(){
 
+        lecturasFirebase = new ArrayList<>();
+
         Log.v(TAG, "getLecturasFirebase");
         Firebase firebase = new Firebase(getApplicationContext());
         FirebaseUser usuario = firebase.getUsuario();
@@ -281,25 +285,50 @@ public class Lecturas extends AppCompatActivity {
         listaLibros.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.v(TAG, "en el metodo pre");
-                Lectura lecFB1 = new Lectura();
-                lecFB1.setTitulo("fff");
-                lecFB1.setAutor(new Autor("pepe"));
-                lecturasFirebase.add(lecFB1);
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()){
-                    System.out.println("NODO "+ postSnapshot.getValue().toString());
+
+                for (DataSnapshot hijo: dataSnapshot.getChildren()){
+                    System.out.println("NODO "+ hijo.getValue().toString());
 
                     Lectura lecFB = new Lectura();
 
-                    lecFB = postSnapshot.getValue(Lectura.class);
+                    String titulo = (String) hijo.child("titulo").getValue();
+                    lecFB.setTitulo(titulo);
+                    String nombreAutor = (String) hijo.child("idAutor").getValue();
+                    lecFB.setAutor(new Autor(nombreAutor));
+
+                    String imagen = (String) hijo.child("imagen").getValue();
+
+                    if(imagen != null){
+
+                        lecFB.setImagen(Uri.parse(imagen));
+
+                    }else{
+
+                        Log.v("HOLA", "Problema con la uri");
+                    }
+
+                    Boolean fav = (Boolean) hijo.child("fav").getValue();
+                    lecFB.setFav(fav);
+                    String fechaI = (String) hijo.child("fechaInicio").getValue();
+                    lecFB.setFechaInicio(fechaI);
+                    String fechaF = (String) hijo.child("fechaFin").getValue();
+                    lecFB.setFechaFin(fechaF);
+                    int valoracion = Integer.parseInt(((Long) hijo.child("valoracion").getValue() + ""));
+                    lecFB.setValoracion(valoracion);
+                    int estado = Integer.parseInt(((Long) hijo.child("estado").getValue() + ""));
+                    lecFB.setEstado(estado);
+                    String resumen = (String) hijo.child("resumen").getValue();
+                    lecFB.setResumen(resumen);
+
+                    Log.v("HOLA", "DAtos letura pasados: " + lecFB.toString());
 
                     lecturasFirebase.add(lecFB);
 
-                    Log.v(TAG, "en el metodo" + lecturasFirebase.get(0));
+                    Log.v("HOLA", "autor" + lecturasFirebase.get(0).getAutor());
+                    Log.v("HOLA", "nombre" + lecturasFirebase.get(0).getAutor().getNombre());
 
                 }
                 clasificaLecturasFireBase();
-                //setAdapter(lecturasLeidas);
                 adaptador.setArray(lecturasLeidas);
                 adaptador.notifyDataSetChanged();
             }
@@ -309,35 +338,6 @@ public class Lecturas extends AppCompatActivity {
 
             }
         });
-        /*listaLibros.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v(TAG, "en el metodo pre");
-                Lectura lecFB1 = new Lectura();
-                lecFB1.setTitulo("fff");
-                lecFB1.setAutor(new Autor("pepe"));
-                lecturasFirebase.add(lecFB1);
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()){
-                    System.out.println("NODO "+ postSnapshot.getValue().toString());
-
-                    Lectura lecFB = new Lectura();
-
-                    lecFB = postSnapshot.getValue(Lectura.class);
-
-                    lecturasFirebase.add(lecFB);
-
-                    Log.v(TAG, "en el metodo" + lecturasFirebase.get(0));
-
-                }
-                clasificaLecturasFireBase();
-                //setAdapter(lecturasLeidas);
-                adaptador.setArray(lecturasLeidas);
-                adaptador.notifyDataSetChanged();
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });*/
     }
 
 
