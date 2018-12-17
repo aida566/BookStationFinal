@@ -639,10 +639,6 @@ public class LecturaDetalle extends AppCompatActivity {
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void compartir(){
         permisos();
-        abrirContactos();
-        /*Intent intent = new Intent(getApplicationContext(), Compartir.class);
-        intent.putExtra("lectura", lec);
-        startActivity(intent);*/
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -650,6 +646,8 @@ public class LecturaDetalle extends AppCompatActivity {
         permiso = checkSelfPermission(Manifest.permission.READ_CONTACTS);
         if(permiso != PackageManager.PERMISSION_GRANTED){
             requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_PERMISSIONS);
+        }else{
+            abrirContactos();
         }
     }
 
@@ -683,7 +681,6 @@ public class LecturaDetalle extends AppCompatActivity {
     }
 
     private void abrirContactos() {
-        lec = getIntent().getParcelableExtra("lectura");
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.escoge_contacto);
         getContactos();

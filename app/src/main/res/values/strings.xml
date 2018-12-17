@@ -57,6 +57,7 @@
     <string name="tvAutores">Autores</string>
     <string name="opcion_eliminar">Eliminar</string>
     <string name="checkBox">Mantener la sesión iniciada</string>
+    <string name="escoge_contacto">Escoge contacto</string>
 
     <!-- Toolbar -->
     <string name="guardar">Guardar</string>

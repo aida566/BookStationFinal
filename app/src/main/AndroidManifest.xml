@@ -54,12 +54,6 @@
             android:name=".Filtrar"
             android:parentActivityName=".Lecturas"></activity>
 
-        <!-- Actividad para compartir un libro -->
-        <activity
-            android:name=".Compartir"
-            android:label="@string/title_activity_compartir"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".LecturaDetalle"></activity>
     </application>
 
 </manifest>
