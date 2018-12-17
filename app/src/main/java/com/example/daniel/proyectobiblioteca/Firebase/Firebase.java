@@ -161,7 +161,7 @@ public  class Firebase {
 
         //le pasamos al metodo una lectura, y un bitmap de foto, si la foto no es null, la sube a firebase
         if (foto != null){
-            subirFotoLibro(foto, Uri.parse(l.getImagen()), l.getTitulo());
+            subirFotoLibro(foto, l.getImagen(), l.getTitulo());
         }
 
         return key;
