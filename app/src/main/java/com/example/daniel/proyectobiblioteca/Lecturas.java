@@ -1,7 +1,6 @@
 package com.example.daniel.proyectobiblioteca;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,10 +15,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 
 import com.example.daniel.proyectobiblioteca.BDLocal.Ayudante;
 import com.example.daniel.proyectobiblioteca.BDLocal.Gestor;
@@ -33,17 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Field;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 public class Lecturas extends AppCompatActivity {
 
@@ -59,7 +44,7 @@ public class Lecturas extends AppCompatActivity {
     private Gestor gestor;
 
     private ArrayList<Lectura> lecturasLeidas = new ArrayList<>(); //primer array donde guardamos los libros leidos
-    private ArrayList<Lectura> lecturasNoLeidas = new ArrayList<>(); //segundo array donde guardamos los libros no leidos
+    private ArrayList<Lectura> lecturasLeyendo = new ArrayList<>(); //segundo array donde guardamos los libros no leidos
     private ArrayList<Lectura> lecturasPorLeer = new ArrayList<>(); //tercer array donde guardamos los libros por leer
     private ArrayList<Autor> autores = new ArrayList<>();
 
@@ -90,7 +75,7 @@ public class Lecturas extends AppCompatActivity {
 
                 case R.id.not_read:
 
-                    adaptador.setArray(lecturasNoLeidas);
+                    adaptador.setArray(lecturasLeyendo);
                     adaptador.notifyDataSetChanged();
 
                     return true;
@@ -202,6 +187,10 @@ public class Lecturas extends AppCompatActivity {
 
             Intent i = new Intent(Lecturas.this, Filtrar.class);
 
+            i.putParcelableArrayListExtra("leidas", lecturasLeidas);
+            i.putParcelableArrayListExtra("leyendo", lecturasLeyendo);
+            i.putParcelableArrayListExtra("porleer", lecturasPorLeer);
+
             startActivity(i);
 
             return true;
@@ -262,7 +251,7 @@ public class Lecturas extends AppCompatActivity {
     public void getLecturasBD(){
 
         lecturasLeidas = gestor.getLecturasPorEstado(1);
-        lecturasNoLeidas = gestor.getLecturasPorEstado(2);
+        lecturasLeyendo = gestor.getLecturasPorEstado(2);
         lecturasPorLeer = gestor.getLecturasPorEstado(3);
 
     }
@@ -347,7 +336,7 @@ public class Lecturas extends AppCompatActivity {
         Log.v(TAG, "clasifica las lecturas");
 
         lecturasLeidas = new ArrayList<>();
-        lecturasNoLeidas = new ArrayList<>();
+        lecturasLeyendo = new ArrayList<>();
         lecturasPorLeer = new ArrayList<>();
 
         Log.v(TAG, "1" + lecturasFirebase.toString());
@@ -366,7 +355,7 @@ public class Lecturas extends AppCompatActivity {
 
             }else if(estado == 2){
 
-                lecturasNoLeidas.add(lec);
+                lecturasLeyendo.add(lec);
 
             }else if(estado == 3){
                 lecturasPorLeer.add(lec);
