@@ -1,16 +1,24 @@
 package com.example.daniel.proyectobiblioteca;
 
+import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.ParcelFileDescriptor;
 import android.print.PrintManager;
+import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TextInputEditText;
@@ -22,6 +30,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
@@ -39,6 +48,7 @@ import com.example.daniel.proyectobiblioteca.BDLocal.Ayudante;
 import com.example.daniel.proyectobiblioteca.BDLocal.Gestor;
 import com.example.daniel.proyectobiblioteca.Firebase.Firebase;
 import com.example.daniel.proyectobiblioteca.POJOS.Autor;
+import com.example.daniel.proyectobiblioteca.POJOS.Contacto;
 import com.example.daniel.proyectobiblioteca.POJOS.Lectura;
 
 //--
@@ -49,7 +59,9 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class LecturaDetalle extends AppCompatActivity {
 
@@ -64,8 +76,11 @@ public class LecturaDetalle extends AppCompatActivity {
     private Calendar c;
     private DatePickerDialog dpd;
     private EditText etFechaInicio, etFechaFin;
+    private ArrayList<Contacto> listaContactos = new ArrayList<>();
 
     private static final int SELECCIONAR_IMAGEN = 2;
+    final private int REQUEST_CODE_PERMISSIONS = 1;
+    int permiso;
 
     private Lectura lec;
 
@@ -246,6 +261,7 @@ public class LecturaDetalle extends AppCompatActivity {
 
 
 
+    @TargetApi(Build.VERSION_CODES.M)
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -272,6 +288,10 @@ public class LecturaDetalle extends AppCompatActivity {
 
             case R.id.opcion_imprimir:
                 doPrint();
+                return true;
+
+            case R.id.opcion_compartir:
+                compartir();
                 return true;
         }
         return false;
@@ -614,5 +634,93 @@ public class LecturaDetalle extends AppCompatActivity {
         PrintManager printManager = (PrintManager) this.getSystemService(Context.PRINT_SERVICE);
         String jobName = this.getString(R.string.app_name) + lec.getTitulo();
         printManager.print(jobName, new Imprimir(this,lec), null);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void compartir(){
+        permisos();
+        abrirContactos();
+        /*Intent intent = new Intent(getApplicationContext(), Compartir.class);
+        intent.putExtra("lectura", lec);
+        startActivity(intent);*/
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void permisos(){
+        permiso = checkSelfPermission(Manifest.permission.READ_CONTACTS);
+        if(permiso != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, REQUEST_CODE_PERMISSIONS);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void sendEmail(Contacto c, Lectura l){
+        String email = getEmail(c, this);
+
+        String[] TO = {(email != null?email:"")};
+        String[] CC = {""};
+        Intent emailIntent = new Intent(Intent.ACTION_SEND);
+        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setType("text/plain");
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, TO);
+        emailIntent.putExtra(Intent.EXTRA_CC, CC);
+
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Email para " + c.getNombre());
+        emailIntent.putExtra(Intent.EXTRA_TEXT, "Hola " + c.getNombre() + " te recomiendo este libro " +
+                l.getTitulo() + ", esta escrito por " + l.getAutor().getNombre() + ". A mi me ha gustado mucho.");
+
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Enviar email..."));
+            finish();
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(getApplicationContext(),
+                    "No hay forma de enviar el email.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void abrirContactos() {
+        lec = getIntent().getParcelableExtra("lectura");
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.escoge_contacto);
+        getContactos();
+        String[] array = new String [listaContactos.size()];
+        for (int i = 0; i < listaContactos.size(); i++) {
+            array[i] = (listaContactos.get(i).getNombre());
+        }
+
+        builder.setItems(array, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendEmail(listaContactos.get(which), lec);
+            }
+        });
+
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public static String getEmail(Contacto c, Context context){
+        Cursor cursor = context.getContentResolver().query(
+                ContactsContract.CommonDataKinds.Email.CONTENT_URI, null,ContactsContract.CommonDataKinds.Email.CONTACT_ID+" = ?",new String[]{c.getId()+""}, null);
+        while (cursor.moveToNext()) {
+            return cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA));
+        }
+        cursor.close();
+        return null;
+    }
+
+    public void getContactos(){
+        Cursor c = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,null,null,null);
+        int id = c.getColumnIndex(ContactsContract.Contacts._ID);
+        int name = c.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME);
+        while(c.moveToNext()){
+            Contacto contacto = new Contacto(c.getLong(id),c.getString(name));
+            listaContactos.add(contacto);
+        }
+        c.close();
     }
 }

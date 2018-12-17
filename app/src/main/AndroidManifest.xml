@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.daniel.proyectobiblioteca">
 
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/logo"
@@ -10,54 +12,54 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
-        <!-- Actividad inicial con la que se inicia la aplicacion-->
-        <activity
-            android:name=".Inicial">
+        <!-- Actividad inicial con la que se inicia la aplicacion -->
+        <activity android:name=".Inicial">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
-        <!--Actividad donde se guardan los libros-->
+        <!-- Actividad donde se guardan los libros -->
         <activity
             android:name=".Lecturas"
             android:logo="@drawable/logo"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
-
-        </activity>
-
-        <!-- Actividad para registrarse-->
+        <!-- Actividad para registrarse -->
         <activity
             android:name=".Register"
-            android:parentActivityName=".Inicial"/>
+            android:parentActivityName=".Inicial" />
 
-        <!-- Actividad login-->
+        <!-- Actividad login -->
         <activity
             android:name=".Login"
-            android:parentActivityName=".Inicial">
-        </activity>
+            android:parentActivityName=".Inicial"></activity>
 
-        <!-- Actividad para editar y ver el detalle-->
+        <!-- Actividad para editar y ver el detalle -->
         <activity
             android:name=".LecturaDetalle"
             android:icon="@drawable/logo"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".Lecturas">
+            android:parentActivityName=".Lecturas"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        </activity>
-
-        <!--Actividad para reestablecer la contraseña-->
+        <!-- Actividad para reestablecer la contraseña -->
         <activity
             android:name=".RestablecerPassword"
-            android:parentActivityName=".Inicial"/>
+            android:parentActivityName=".Inicial" />
 
-        <activity android:name=".Filtrar"
-            android:parentActivityName=".Lecturas">
-        </activity>
+        <!-- -->
+        <activity
+            android:name=".Filtrar"
+            android:parentActivityName=".Lecturas"></activity>
+
+        <!-- Actividad para compartir un libro -->
+        <activity
+            android:name=".Compartir"
+            android:label="@string/title_activity_compartir"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".LecturaDetalle"></activity>
     </application>
 
 </manifest>

@@ -52,11 +52,12 @@
 
     <string name="restablecer">Restablecer contraseña</string>
     <string name="correo_enviado_restablecer">Revise su dirección de correo electrónico para restablecer la contraseña</string>
-    <string name="btBuscar" >Buscar</string>
+    <string name="btBuscar">Buscar</string>
     <string name="tvEstado">Estado</string>
     <string name="tvAutores">Autores</string>
     <string name="opcion_eliminar">Eliminar</string>
     <string name="checkBox">Ser feliz</string>
+    <string name="escoge_contacto">Escoge contacto</string>
 
     <!-- Toolbar -->
     <string name="guardar">Guardar</string>
@@ -64,5 +65,6 @@
     <string name="compartir">Compartir</string>
     <string name="imprimir">Imprimir</string>
     <string name="borrar">Borrar</string>
+    <string name="title_activity_compartir">Compartir</string>
 
 </resources>
