@@ -18,7 +18,7 @@
 
     <!-- menu botones -->
     <string name="text_leidos">Leidos</string>
-    <string name="text_no_leidos">No leidos</string>
+    <string name="text_no_leidos">Leyendo</string>
     <string name="text_want_to_read">Por leer</string>
 
     <!-- hints -->
@@ -40,7 +40,7 @@
 
     <!-- Radio Buttons -->
     <string name="rb_leido">Leido</string>
-    <string name="rb_no_leido">No leido</string>
+    <string name="rb_no_leido">Leyendo</string>
     <string name="rb_want_to_read">Por leer</string>
 
     <string name="choose_image">Seleccionar imagen</string>
@@ -52,12 +52,11 @@
 
     <string name="restablecer">Restablecer contraseña</string>
     <string name="correo_enviado_restablecer">Revise su dirección de correo electrónico para restablecer la contraseña</string>
-    <string name="btBuscar">Buscar</string>
+    <string name="btBuscar" >Buscar</string>
     <string name="tvEstado">Estado</string>
     <string name="tvAutores">Autores</string>
     <string name="opcion_eliminar">Eliminar</string>
-    <string name="checkBox">Ser feliz</string>
-    <string name="escoge_contacto">Escoge contacto</string>
+    <string name="checkBox">Mantener la sesión iniciada</string>
 
     <!-- Toolbar -->
     <string name="guardar">Guardar</string>
@@ -65,6 +64,5 @@
     <string name="compartir">Compartir</string>
     <string name="imprimir">Imprimir</string>
     <string name="borrar">Borrar</string>
-    <string name="title_activity_compartir">Compartir</string>
 
 </resources>
