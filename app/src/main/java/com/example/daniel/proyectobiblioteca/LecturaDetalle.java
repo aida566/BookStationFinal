@@ -117,6 +117,7 @@ public class LecturaDetalle extends AppCompatActivity {
         inicializar();
         toggleOnClick();
         datePicker();
+        setRadioButtonsListener();
 
         firebase = new Firebase(getApplicationContext());
         btSelImagen.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +139,9 @@ public class LecturaDetalle extends AppCompatActivity {
             editar = false; //Controla los botones del menú
             deshabilitarEdicion();     //como se quiere ver el detalle se dehabilita la edicion de los edit text
             modo = "detalle";
+
+            Log.v(TAG, "FBKEY de lectura al ir a detalle: " + lec.getFbkey());
+
         }else{
             Log.v(TAG, "Se envia lectura vacía.");
             // Se activara la edicion para añadir una nueva lectura
@@ -160,6 +164,50 @@ public class LecturaDetalle extends AppCompatActivity {
                 imagenLibro.setImageURI(Uri.parse(savedInstanceState.getString("uriImagen")));
             }
         }else{}
+    }
+
+    public void setRadioButtonsListener(){
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                Resources res = getResources();
+                String formatoFecha = res.getString(R.string.formato_fecha);
+                switch (checkedId){
+                    case R.id.radioButton:
+                        etFechaInicio.setEnabled(true);
+                        etFechaFin.setEnabled(true);
+                        tbFavorito.setChecked(true);
+                        tbFavorito.setEnabled(true);
+
+                        break;
+
+                    case R.id.radioButton2:
+                        etFechaFin.setText(formatoFecha);
+                        etFechaFin.setEnabled(false);
+                        tbFavorito.setChecked(true);
+                        tbFavorito.setEnabled(true);
+
+                        break;
+
+                    case R.id.radioButton3:
+                        etFechaInicio.setText(formatoFecha);
+                        etFechaInicio.setEnabled(false);
+                        etFechaFin.setText(formatoFecha);
+                        etFechaFin.setEnabled(false);
+                        tbFavorito.setChecked(false);
+                        tbFavorito.setEnabled(false);
+
+                        break;
+
+                    default:
+                        etFechaInicio.setEnabled(true);
+                        etFechaFin.setEnabled(true);
+                        break;
+                }
+
+            }
+        });
     }
 
     @Override
@@ -284,6 +332,7 @@ public class LecturaDetalle extends AppCompatActivity {
 
             case R.id.opcion_eliminar:
                 eliminaLectura();
+                firebase.eliminarLecturaAsociada(lec);
                 return true;
 
             case R.id.opcion_imprimir:
@@ -336,25 +385,37 @@ public class LecturaDetalle extends AppCompatActivity {
 
         int estado = lectura.getEstado();
 
+        Resources res = getResources();
+        String formatoFecha = res.getString(R.string.formato_fecha);
+
         if(estado == 1){
             radioGroup.check(R.id.radioButton1);
-
+            etFechaInicio.setEnabled(true);
+            etFechaFin.setEnabled(true);
+            etFechaInicio.setText( lectura.getFechaInicio());
+            etFechaFin.setText( lectura.getFechaFin());
+            tbFavorito.setChecked(true);
+            tbFavorito.setEnabled(true);
+            tbFavorito.setChecked(lectura.getFav());
         }else if(estado == 2){
-
             radioGroup.check(R.id.radioButton2);
-
+            etFechaFin.setText(formatoFecha);
+            etFechaFin.setEnabled(false);
+            etFechaInicio.setText( lectura.getFechaInicio());
+            tbFavorito.setChecked(true);
+            tbFavorito.setEnabled(true);
+            tbFavorito.setChecked(lectura.getFav());
         }else{
-
             radioGroup.check(R.id.radioButton3);
-
+            etFechaInicio.setText(formatoFecha);
+            etFechaInicio.setEnabled(false);
+            etFechaFin.setText(formatoFecha);
+            etFechaFin.setEnabled(false);
+            tbFavorito.setChecked(false);
+            tbFavorito.setEnabled(false);
         }
-
-        etFechaInicio.setText( lectura.getFechaInicio());
-        etFechaFin.setText( lectura.getFechaFin());
-
         txResumen.setText(lectura.getResumen());
         tbFavorito.setChecked(lectura.getFav());
-
     }
 
     public void deshabilitarEdicion() {
@@ -427,104 +488,99 @@ public class LecturaDetalle extends AppCompatActivity {
         Boolean autorCorrecto = !autor.getNombre().equalsIgnoreCase("");
 
         if(tituloCorrecto && autorCorrecto){
-            /*if(fechaFin.compareTo(fechaInicio)==-1){
-                Toast.makeText(this, "La fecha de finalizacion no puede ser anterior", Toast.LENGTH_LONG).show();
-            }else {*/
-                //Podemos insertar/editar la lectura
-                int estado = obtenerEstadoSeleccionado();
-                //Key de firebasetemporal
-                String key = "";
-                Lectura lecturaNueva = new Lectura(titulo, autor, uriImagen, fav, fechaInicio,
-                        fechaFin, valoracion, estado, resumen, key);
-                Log.v("FAV", lecturaNueva.toString());
-                //Variable que controlará si el resultado del activityForResult es correcto o erróneo
-                //dependiendo de si se han insertado correctamente los datos en la BD.
-                int valorResult;
-                //Asignamos el antiguo id a la nueva lectura.
-                lecturaNueva.setIdLectura(lec.getIdLectura());
-                //Insertar la la lectura a la BD Local.
-                ayudante = new Ayudante(this);
-                gestor = new Gestor(this, true);
-                int filasA = 0;
-                Long numA = Long.valueOf("0");
 
-                if (modo.equalsIgnoreCase("detalle")) {
+            //Podemos insertar/editar la lectura
+            int estado = obtenerEstadoSeleccionado();
 
-                    Log.v(TAG, "MODO EDITA AUTOR");
-                    //Editamos el autor
-                    filasA = gestor.editarAutor(autor);
+            //Key de firebasetemporal
+            String key = "";
 
-                } else {
+            if(!lec.getFbkey().equalsIgnoreCase("")){
+                key = lec.getFbkey();
+            }
 
-                    Log.v(TAG, "MODO INSERTA AUTOR");
+            Lectura lecturaNueva = new Lectura(titulo, autor, uriImagen, fav, fechaInicio,
+                    fechaFin, valoracion, estado, resumen, key);
+            Log.v("FAV", lecturaNueva.toString());
+            //Variable que controlará si el resultado del activityForResult es correcto o erróneo
+            //dependiendo de si se han insertado correctamente los datos en la BD.
+            int valorResult;
+            //Asignamos el antiguo id a la nueva lectura.
+            lecturaNueva.setIdLectura(lec.getIdLectura());
+            //Insertar la la lectura a la BD Local.
+            ayudante = new Ayudante(this);
+            gestor = new Gestor(this, true);
+            int filasA = 0;
+            Long numA = Long.valueOf("0");
 
-                    //Insertamos el autor
-                    numA = gestor.insertarAutor(autor);
+            if (modo.equalsIgnoreCase("detalle")) {
+
+                Log.v(TAG, "MODO EDITA AUTOR");
+                //Editamos el autor
+                filasA = gestor.editarAutor(autor);
+
+            } else {
+
+                Log.v(TAG, "MODO INSERTA AUTOR");
+
+                //Insertamos el autor
+                numA = gestor.insertarAutor(autor);
+            }
+
+            if (numA != -1 || filasA != 0) { //Si el autor se inserta correctamente
+
+                //Cogemos el id que se la ha asignado en la BD y se lo asignamos al objeto autor.
+                int idAutor = gestor.getLastIDAutor();
+                autor.setId(idAutor);
+
+                //Actualizamos el autor de la nueva lectura
+                lecturaNueva.setAutor(autor);
+
+                int filasL = 0;
+                Long numL = Long.valueOf("0");
+
+                //Insertamos la lectura
+                if(lec.getFbkey().isEmpty() || lec.getFbkey() == null){
+
+                    key = firebase.guardarLecturaAsociada(lecturaNueva);
+                    lecturaNueva.setFbkey(key);
+                    Log.v(TAG, "LA KEY AL INSERTAR: " + lecturaNueva.getFbkey() + " - " + key);
+
+                }else{
+                    Log.v(TAG, "ENTRA EN EDITAR");
+                    key = firebase.editarLecturaAsociada(lecturaNueva);
+                    lecturaNueva.setFbkey(key);
                 }
 
-                if (numA != -1 || filasA != 0) { //Si el autor se inserta correctamente
-
-                    //Cogemos el id que se la ha asignado en la BD y se lo asignamos al objeto autor.
-                    int idAutor = gestor.getLastIDAutor();
-                    autor.setId(idAutor);
-
-                    //Actualizamos el autor de la nueva lectura
-                    lecturaNueva.setAutor(autor);
-
-                    int filasL = 0;
-                    Long numL = Long.valueOf("0");
-                    /*
-                    //--------SUBIDA DE LECTURA Y DE FOTO A FIREBASE
-                    Bitmap fotoBitmap=null;
-                    try {
-                        fotoBitmap = getBitmapFromUri(lecturaNueva.getImagen());
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                     if (fotoBitmap != null) {
-                        Log.v(TAG, "bitMap no es null");
-                         //Insertamos la lectura con imagen
-                         firebase.guardarLecturaAsociada(lecturaNueva,fotoBitmap);
-
-                     }else{
-
-                        Log.v(TAG, "bitmap es null");
-                    */
-                        //Insertamos la lectura sin imagen
-                         key = firebase.guardarLecturaAsociada(lecturaNueva);
-                     //}
-
-                    lecturaNueva.setFbkey(key);
-
-                    if (modo.equalsIgnoreCase("detalle")) {
-                        Log.v(TAG, "MODO EDITA");
-                        //Editamos la lectura
-                        filasL = gestor.editarLectura(lecturaNueva);
-
-                    } else {
-                        Log.v(TAG, "MODO INSERTA");
-                        //Insertamos la nueva lectura
-                        numL = gestor.insertarLectura(lecturaNueva);
-                    }
-
-                    if (numL != -1 || filasL != 0) {
-                        Log.v(TAG, "Se ha insertado en la BDLocal");
-                        valorResult = LecturaDetalle.RESULT_OK;
-                    } else {
-                        Log.v(TAG, "No se ha insertado en la BDLocal");
-                        gestor.eliminarAutor(autor.getId());
-                        valorResult = LecturaDetalle.RESULT_CANCELED;
-                    }
+                if (modo.equalsIgnoreCase("detalle")) {
+                    Log.v(TAG, "MODO EDITA");
+                    //Editamos la lectura
+                    filasL = gestor.editarLectura(lecturaNueva);
 
                 } else {
+                    Log.v(TAG, "MODO INSERTA");
+                    //Insertamos la nueva lectura
+                    numL = gestor.insertarLectura(lecturaNueva);
+                }
+
+                if (numL != -1 || filasL != 0) {
+                    Log.v(TAG, "Se ha insertado en la BDLocal");
+                    valorResult = LecturaDetalle.RESULT_OK;
+                } else {
+                    Log.v(TAG, "No se ha insertado en la BDLocal");
+                    gestor.eliminarAutor(autor.getId());
                     valorResult = LecturaDetalle.RESULT_CANCELED;
                 }
 
-                Intent i = new Intent();
-                setResult(valorResult, i);
-                Log.v(TAG, "Sale de LecturaDetalle");
-                finish();
-            //}
+            } else {
+                valorResult = LecturaDetalle.RESULT_CANCELED;
+            }
+
+            Intent i = new Intent();
+            setResult(valorResult, i);
+            Log.v(TAG, "Sale de LecturaDetalle");
+            finish();
+
         }else if(!tituloCorrecto){
             txNombreLibro.setError(res.getString(R.string.error));
             editar = false;

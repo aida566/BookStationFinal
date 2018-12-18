@@ -36,6 +36,7 @@
     <string name="user_vacio">Debe introducir un nombre de usuario</string>
     <string name="email_vacio">Debe introducir una dirección de email</string>
     <string name="password_vacia">Debe introducir la contraseña</string>
+    <string name="password_caracteres">Debe introducir al menos 6 caracteres</string>
     <string name="error_restablecer">Su correo no está dado de alta en la aplicación</string>
 
     <!-- Radio Buttons -->

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -145,7 +146,7 @@ public class Lecturas extends AppCompatActivity {
                 Log.v(TAG, "Lectura clickeada: " + l.getTitulo() + " - " + l.getAutor().getId());
 
                 Intent i = new Intent(Lecturas.this, LecturaDetalle.class);
-                i.putExtra("lectura", l);
+                i.putExtra("lectura", (Parcelable) l);
 
                 startActivityForResult(i, INICIAR_DETALLE);
             }
@@ -308,6 +309,11 @@ public class Lecturas extends AppCompatActivity {
                     lecFB.setEstado(estado);
                     String resumen = (String) hijo.child("resumen").getValue();
                     lecFB.setResumen(resumen);
+
+                    String fbkey = (String) hijo.getKey();
+                    lecFB.setFbkey(fbkey);
+
+                    Log.v(TAG, "KEY SACADA: " + fbkey);
 
                     Log.v("HOLA", "DAtos letura pasados: " + lecFB.toString());
 

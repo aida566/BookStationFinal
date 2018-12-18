@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.google.firebase.database.Exclude;
 
@@ -205,6 +206,7 @@ public class Lectura implements Parcelable {
         dest.writeInt(estado);
         dest.writeString(resumen);
         dest.writeString(fbkey);
+        Log.v("PARCELKEY", fbkey);
     }
 
 
@@ -223,6 +225,7 @@ public class Lectura implements Parcelable {
         result.put("valoracion", valoracion);
         result.put("estado", estado);
         result.put("resumen", resumen);
+        result.put("fbkey", fbkey);
 
         return result;
     }

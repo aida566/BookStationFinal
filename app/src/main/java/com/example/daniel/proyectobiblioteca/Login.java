@@ -47,6 +47,14 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         inicializar();
 
+        Intent deRegister = getIntent();
+
+        String email = deRegister.getStringExtra("email");
+        String pass = deRegister.getStringExtra("pass");
+
+        txEmail.setText(email);
+        txPassword.setText(pass);
+
         /*
         -Las preferencias devuelven en un String con el user y la contraseña en la misma bvariable separado por un guion
         los separamos en un array para coger los valores por separado y mandarlos a iniciar sesion */

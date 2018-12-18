@@ -187,13 +187,46 @@ public  class Firebase {
                 }
             }
         });
-        /*
-        //le pasamos al metodo una lectura, y un bitmap de foto, si la foto no es null, la sube a firebase
-        if (foto != null){
-            subirFotoLibro(foto, l.getImagen(), l.getTitulo());
-        }
-        */
         return key;
+    }
+
+    public  String editarLecturaAsociada(Lectura l){ // guarda un item en el directorio de usuario
+        //   Item i = new Item("3", "nombre3", "mensaje3");
+        Map<String, Object> saveItem = new HashMap<>();
+        FirebaseUser usuarioActual= autentificador.getCurrentUser();
+        String key = "";
+        key = l.getFbkey();
+
+        saveItem.put("/correo/" + usuarioActual.getUid() +"-"+ usuarioActual.getDisplayName() + "/libro/" + key + "/", l.toMap());
+
+        reference = database.getReference();
+
+        reference.updateChildren(saveItem).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if(task.isSuccessful()){
+                    Log.v(TAG, "LECTURA EDITADA");
+                }else{
+                    System.out.println("ERROR LECTURAASOCIADA " +task.getException().toString());
+                }
+            }
+        });
+        return key;
+    }
+
+
+    public  void eliminarLecturaAsociada(Lectura l){ // guarda un item en el directorio de usuario
+        //   Item i = new Item("3", "nombre3", "mensaje3");
+        Map<String, Object> saveItem = new HashMap<>();
+        FirebaseUser usuarioActual= autentificador.getCurrentUser();
+        String key = "";
+        key = l.getFbkey();
+
+        saveItem.put("/correo/" + usuarioActual.getUid() +"-"+ usuarioActual.getDisplayName() + "/libro/" + key + "/", l.toMap());
+
+        reference = database.getReference();
+
+        reference.removeValue();
     }
 
     public void subirFotoLibro(Bitmap bitmap, Uri uri, String titulo) {

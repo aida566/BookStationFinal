@@ -55,8 +55,10 @@ public class Register extends AppCompatActivity {
                 if (comprobarDatos()){
                     registrarUsuario();
 
-                    //   Intent intent = new Intent(Register.this, Lecturas.class);
-                    // startActivity(intent);
+                    Intent iniSesion = new Intent(Register.this, Login.class);
+                    iniSesion.putExtra("email", tvEmail.getText().toString());
+                    iniSesion.putExtra("pass", tvPassword.getText().toString());
+                    startActivity(iniSesion);
                 }
 
 
@@ -93,21 +95,35 @@ public class Register extends AppCompatActivity {
 
     public boolean comprobarDatos(){
         if (tvNombreUsuario.getText().toString().isEmpty()){
+            tlNameUser.setErrorEnabled(true);
             tlNameUser.setError(getString(R.string.user_vacio));
             return false;
+        }else{
+            tlNameUser.setErrorEnabled(false);
         }
         if (tvEmail.getText().toString().isEmpty()){
+            tlEmail.setErrorEnabled(true);
             tlEmail.setError(getString(R.string.email_vacio));
             return false;
+        }else{
+            tlEmail.setErrorEnabled(false);
         }
         if (tvPassword.getText().toString().isEmpty()){
+            tlPassword.setErrorEnabled(true);
             tlPassword.setError(getString(R.string.password_vacia));
             return false;
+        }else{
+            tlPassword.setErrorEnabled(false);
+        }
+        if (tvPassword.getText().toString().length() <= 5){
+            tlPassword.setErrorEnabled(true);
+            tlPassword.setError(getString(R.string.password_caracteres));
+            return false;
+        }else{
+            tlPassword.setErrorEnabled(false);
         }
 
         return true;
-
-
     }
 
     public void registrarUsuario(){
